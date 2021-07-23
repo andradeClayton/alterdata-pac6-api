@@ -14,13 +14,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-@Table(name = "USUARIO")
+@Table(name = "USUARIO", uniqueConstraints={@UniqueConstraint(columnNames={"useName","email","nickName"})})
 public class UsuarioEntity {
 	
 	
