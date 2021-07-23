@@ -11,11 +11,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "PAPEL")
+@Table(name = "PAPEL", uniqueConstraints={@UniqueConstraint(columnNames={"nome"})})
 public class PapelEntity {
 
 	@Id
