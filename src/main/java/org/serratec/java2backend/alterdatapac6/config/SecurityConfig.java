@@ -7,6 +7,7 @@ import org.serratec.java2backend.alterdatapac6.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,14 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	JWTUtil jwtUtil;
 	
-	private static final String[] AUTH_WHITELIST = {};
+	private static final String[] AUTH_WHITELIST = {"/usuario"};
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
 //		.antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
-		.antMatchers(AUTH_WHITELIST).permitAll()
+		.antMatchers(HttpMethod.POST, AUTH_WHITELIST).permitAll()
 		.anyRequest().authenticated();
 		http.addFilterBefore(new JWTAutheticationFilter(authenticationManager(),jwtUtil), 
 				UsernamePasswordAuthenticationFilter.class);
