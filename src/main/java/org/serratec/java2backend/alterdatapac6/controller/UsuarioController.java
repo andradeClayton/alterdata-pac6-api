@@ -40,9 +40,9 @@ public class UsuarioController {
 		return service.getAll();
 	}
 
-	@GetMapping("/{nome}")
-	public UsuarioEntity getByUserNome(@PathVariable String nome) {
-		return service.getByUserName(nome);
+	@GetMapping("/{userName}")
+	public UsuarioEntity getByUserNome(@PathVariable String userName) {
+		return service.getByUserName(userName);
 	}
 	
 	/* antes da inclusão de imagens
@@ -62,7 +62,7 @@ public class UsuarioController {
 
 	
 
-	@PostMapping
+	@PostMapping("/create")
 	public UsuarioDto create(@RequestParam MultipartFile file , @RequestPart UsuarioDto usuario) throws IOException {
 		return service.create(usuario,file);
 	}
