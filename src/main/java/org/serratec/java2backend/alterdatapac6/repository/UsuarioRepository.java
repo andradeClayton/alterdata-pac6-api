@@ -11,12 +11,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
 	UsuarioEntity getByNome(String nome);
 
-	@Query("SELECT u FROM UsuarioEntity u WHERE u.useName = :useName")
-	UsuarioEntity getByUserName(@Param("useName")String useName);
+	@Query("SELECT u FROM UsuarioEntity u WHERE u.userName = :userName")
+	UsuarioEntity getByUserName(@Param("userName")String useName);
+
+	UsuarioEntity findByUserName(String username);
 
 }
-
-/*
- * @Query("SELECT u FROM User u WHERE u.status = :status) User
- * findUserByStatusNamedParams(@Param("status") Integer status);
- */

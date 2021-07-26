@@ -21,11 +21,24 @@ public class UsuarioDto {
 	private String email;
 	
 	private Date dtNascimento;
+	
+	private String url;
 
 	public UsuarioDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	
+	public String getUrl() {
+		return url;
+	}
+
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 
 	public String getNome() {
 		return nome;

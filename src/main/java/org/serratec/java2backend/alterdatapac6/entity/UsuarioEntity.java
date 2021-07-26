@@ -1,6 +1,5 @@
 package org.serratec.java2backend.alterdatapac6.entity;
 
-import java.security.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -9,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -17,11 +15,10 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-@Table(name = "USUARIO", uniqueConstraints={@UniqueConstraint(columnNames={"useName","email","nickName"})})
+@Table(name = "USUARIO", uniqueConstraints={@UniqueConstraint(columnNames={"userName","email","nickName"})})
 public class UsuarioEntity {
 	
 	
@@ -33,13 +30,16 @@ public class UsuarioEntity {
 	
 	private String nickName;
 	
+	@OneToOne
+	private ImagemEntity imagem;
 	
 	@ManyToOne 
 	@JoinColumn(referencedColumnName = "id")
 	private PapelEntity papel;
 	
-	private String useName;
+	private String userName;
 	
+	@JsonBackReference
 	private String password;
 	
 	
@@ -58,6 +58,8 @@ public class UsuarioEntity {
 	private Date dtNascimento;
 	
 	
+	
+	
 	public UsuarioEntity() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -65,6 +67,23 @@ public class UsuarioEntity {
 
 	
 	
+	
+	public ImagemEntity getImagem() {
+		return imagem;
+	}
+
+
+
+
+
+	public void setImagem(ImagemEntity imagem) {
+		this.imagem = imagem;
+	}
+
+
+
+
+
 	public String getEmail() {
 		return email;
 	}
@@ -121,12 +140,12 @@ public class UsuarioEntity {
 		this.papel = papel;
 	}
 
-	public String getUseName() {
-		return useName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUseName(String useName) {
-		this.useName = useName;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getPassword() {
@@ -152,7 +171,12 @@ public class UsuarioEntity {
 	public void setStatus(StatusEntity status) {
 		this.status = status;
 	}
-	
-	
 
+
+
+
+
+	
+	
+	
 }

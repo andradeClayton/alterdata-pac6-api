@@ -1,10 +1,9 @@
 package org.serratec.java2backend.alterdatapac6.service;
 
-import java.io.Console;
-import java.util.Date;
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
-import org.serratec.java2backend.alterdatapac6.dto.PapelDto;
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDto;
 import org.serratec.java2backend.alterdatapac6.entity.EquipeEntity;
 import org.serratec.java2backend.alterdatapac6.entity.PapelEntity;
@@ -16,7 +15,10 @@ import org.serratec.java2backend.alterdatapac6.repository.PapelRepository;
 import org.serratec.java2backend.alterdatapac6.repository.StatusRepository;
 import org.serratec.java2backend.alterdatapac6.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
 public class UsuarioService {
@@ -36,6 +38,12 @@ public class UsuarioService {
 	@Autowired
 	EquipeRepository equipeRepository;
 	
+	@Autowired
+	ImagemService imagemService;
+	
+	@Autowired
+	BCryptPasswordEncoder bCrypt;
+	
 	public List<UsuarioEntity> getAll() {
 
 		return repository.findAll();
@@ -45,44 +53,27 @@ public class UsuarioService {
 		return repository.getByUserName(useName);
 	}
 
-	public UsuarioDto create(UsuarioDto usuario) {
-		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
+	/* antes de incluir a imagem
+	 * public UsuarioDto create(UsuarioDto usuario) { UsuarioEntity usuarioNovo =
+	 * mapper.toEntity(usuario);
+	 * 
+	 * PapelEntity papel = new PapelEntity(); papel =
+	 * papelRepository.getByNome(usuario.getPapel()); usuarioNovo.setPapel(papel);
+	 * 
+	 * StatusEntity status = new StatusEntity(); status =
+	 * statusRepository.getByNome(usuario.getStatus());
+	 * usuarioNovo.setStatus(status);
+	 * 
+	 * EquipeEntity equipe = new EquipeEntity(); equipe =
+	 * equipeRepository.getByNome(usuario.getEquipe());
+	 * usuarioNovo.setEquipe(equipe);
+	 * 
+	 * return mapper.toDto(repository.save(usuarioNovo)); }
+	 */
 	
-		PapelEntity papel = new PapelEntity();
-		papel = papelRepository.getByNome(usuario.getPapel());
-		usuarioNovo.setPapel(papel);
-		
-		StatusEntity status = new StatusEntity();
-		status = statusRepository.getByNome(usuario.getStatus());
-		usuarioNovo.setStatus(status);
-		
-		EquipeEntity equipe = new EquipeEntity();
-		equipe = equipeRepository.getByNome(usuario.getEquipe());
-		usuarioNovo.setEquipe(equipe);
-		
-		return mapper.toDto(repository.save(usuarioNovo));
-	}
-
 	
 	public UsuarioDto update(UsuarioDto usuario) {
-		/*UsuarioEntity usuarioNovo = mapper.toEntity(usuario);*/
 		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUseName());
-		
-		/*
-		 * PapelEntity papel = new PapelEntity(); papel =
-		 * papelRepository.getByNome(usuario.getPapel());
-		 */
-		
-		/*
-		 * StatusEntity status = new StatusEntity(); status =
-		 * statusRepository.getByNome(usuario.getStatus());
-		 */
-		/*
-		 * EquipeEntity equipe = new EquipeEntity(); equipe =
-		 * equipeRepository.getByNome(usuario.getEquipe());
-		 */
-		
-		
 
 		if (usuario.getNome() != null) {
 			usuarioHist.setNome(usuario.getNome());
@@ -100,7 +91,7 @@ public class UsuarioService {
 		}
 		
 		if (usuario.getUseName() != null) {
-			usuarioHist.setUseName(usuario.getUseName());
+			usuarioHist.setUserName(usuario.getUseName());
 		}
 		
 		if (usuario.getPassword() != null) {
@@ -139,6 +130,46 @@ public class UsuarioService {
 		Long usuarioId = usuario.getId();
 
 		repository.deleteById(usuarioId);
+	}
+
+
+
+	public UsuarioEntity createUsuario(UsuarioDto usuario) {
+		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
+	
+		PapelEntity papel = new PapelEntity();
+		papel = papelRepository.getByNome(usuario.getPapel());
+		usuarioNovo.setPapel(papel);
+		
+		StatusEntity status = new StatusEntity();
+		status = statusRepository.getByNome(usuario.getStatus());
+		usuarioNovo.setStatus(status);
+		
+		EquipeEntity equipe = new EquipeEntity();
+		equipe = equipeRepository.getByNome(usuario.getEquipe());
+		usuarioNovo.setEquipe(equipe);
+		
+		usuarioNovo.setPassword(bCrypt.encode(usuarioNovo.getPassword()));
+		return repository.save(usuarioNovo);
+	
+	
+	}
+	
+	public UsuarioDto addImageUrl(UsuarioEntity entity) {
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("{usuarioId}/image")
+				.buildAndExpand(entity.getId()).toUri();
+		
+		UsuarioDto usu = new UsuarioDto();
+		usu = mapper.toDto(entity);
+		usu.setUrl(uri.toString());
+		return usu;
+	}
+	
+	public UsuarioDto create(UsuarioDto dto, MultipartFile file) throws IOException {
+		
+		UsuarioEntity entitySaved = createUsuario(dto);
+		imagemService.create(entitySaved, file);
+		return addImageUrl(entitySaved);
 	}
 
 

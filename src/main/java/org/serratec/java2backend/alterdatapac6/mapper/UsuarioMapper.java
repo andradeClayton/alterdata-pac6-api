@@ -15,7 +15,7 @@ public class UsuarioMapper {
 		UsuarioEntity entity = new UsuarioEntity();
 		entity.setNome(dto.getNome());
 		entity.setNickName(dto.getNickName());
-		entity.setUseName(dto.getUseName());
+		entity.setUserName(dto.getUseName());
 		entity.setPassword(dto.getPassword());
 		entity.setEmail(dto.getEmail());
 		entity.setDtNascimento(dto.getDtNascimento());
@@ -28,8 +28,8 @@ public class UsuarioMapper {
 		
 		dto.setNome(entity.getNome());
 		dto.setNickName(entity.getNickName());
-		dto.setUseName(entity.getUseName());
-		dto.setPassword(entity.getPassword());
+		dto.setUseName(entity.getUserName());
+	//	dto.setPassword(entity.getPassword());
 		dto.setEmail(entity.getEmail());
 		dto.setDtNascimento(entity.getDtNascimento());
 		dto.setPapel(entity.getPapel().getNome());
