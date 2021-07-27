@@ -10,7 +10,7 @@ public class UsuarioDto {
 	
 	private String papel;
 	
-	private String useName;
+	private String userName;
 	
 	private String password;
 	
@@ -64,12 +64,12 @@ public class UsuarioDto {
 		this.papel = papel;
 	}
 
-	public String getUseName() {
-		return useName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUseName(String useName) {
-		this.useName = useName;
+	public void setUseName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getPassword() {

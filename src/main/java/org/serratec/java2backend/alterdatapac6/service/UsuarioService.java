@@ -73,7 +73,7 @@ public class UsuarioService {
 	
 	
 	public UsuarioDto update(UsuarioDto usuario) {
-		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUseName());
+		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUserName());
 
 		if (usuario.getNome() != null) {
 			usuarioHist.setNome(usuario.getNome());
@@ -90,8 +90,8 @@ public class UsuarioService {
 			
 		}
 		
-		if (usuario.getUseName() != null) {
-			usuarioHist.setUserName(usuario.getUseName());
+		if (usuario.getUserName() != null) {
+			usuarioHist.setUserName(usuario.getUserName());
 		}
 		
 		if (usuario.getPassword() != null) {
@@ -156,7 +156,7 @@ public class UsuarioService {
 	}
 	
 	public UsuarioDto addImageUrl(UsuarioEntity entity) {
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("{usuarioId}/image")
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario/{usuarioId}/image")
 				.buildAndExpand(entity.getId()).toUri();
 		
 		UsuarioDto usu = new UsuarioDto();

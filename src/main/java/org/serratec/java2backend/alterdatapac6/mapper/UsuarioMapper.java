@@ -15,7 +15,7 @@ public class UsuarioMapper {
 		UsuarioEntity entity = new UsuarioEntity();
 		entity.setNome(dto.getNome());
 		entity.setNickName(dto.getNickName());
-		entity.setUserName(dto.getUseName());
+		entity.setUserName(dto.getUserName());
 		entity.setPassword(dto.getPassword());
 		entity.setEmail(dto.getEmail());
 		entity.setDtNascimento(dto.getDtNascimento());

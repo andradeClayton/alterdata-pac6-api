@@ -55,9 +55,9 @@ public class UsuarioController {
 		return service.update(usuario);
 	}
 	
-	@DeleteMapping("/{nome}")
-	public void deleteByUserName(@PathVariable String nome) {
-		service.deleteByUserName(nome);
+	@DeleteMapping("/{userName}")
+	public void deleteByUserName(@PathVariable String userName) {
+		service.deleteByUserName(userName);
 	}
 
 	
