@@ -2,8 +2,12 @@ package org.serratec.java2backend.alterdatapac6.service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
+import org.serratec.java2backend.alterdatapac6.config.MailConfig;
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDto;
 import org.serratec.java2backend.alterdatapac6.entity.EquipeEntity;
 import org.serratec.java2backend.alterdatapac6.entity.PapelEntity;
@@ -44,13 +48,39 @@ public class UsuarioService {
 	@Autowired
 	BCryptPasswordEncoder bCrypt;
 	
-	public List<UsuarioEntity> getAll() {
-
-		return repository.findAll();
+	@Autowired
+	MailConfig mailConfig;
+	
+	/*
+	 * antes de incluir a url da imagem public List<UsuarioEntity> getAll() {
+	 * 
+	 * return repository.findAll(); }
+	 */
+	
+	public List<UsuarioDto> getAll() {
+		List<UsuarioEntity> listEntity = repository.findAll();
+		List<UsuarioDto> listDto = new ArrayList();
+		UsuarioDto usuarioDto;
+		for(UsuarioEntity entity:listEntity) {
+			String userName = entity.getUserName();
+			usuarioDto = getByUserNameUrl(userName);
+			listDto.add(usuarioDto);
+		}
+		
+		return listDto;
 	}
+	
 
 	public UsuarioEntity getByUserName(String useName) {
 		return repository.getByUserName(useName);
+		
+		
+	}
+	
+	public UsuarioDto getByUserNameUrl(String userName) {
+		UsuarioEntity entity = repository.getByUserName(userName);
+		UsuarioDto dto = addImageUrl(entity);
+		return dto;
 	}
 
 	/* antes de incluir a imagem
@@ -172,5 +202,57 @@ public class UsuarioService {
 		return addImageUrl(entitySaved);
 	}
 
-
+	
+	public String resetSenha(String userName) throws MessagingException {
+		
+		UsuarioEntity entity = getByUserName(userName);
+		String email,senhaNova,usuario;
+		email = entity.getEmail();
+		usuario= entity.getUserName();
+		senhaNova = "ResetPac62021";
+		entity.setPassword(bCrypt.encode(senhaNova));
+		repository.save(entity);
+		
+		String subject = "Reset de senha";
+		
+		String body ="<tr><td>"+usuario+"</td><td></td>"+"<td>"+senhaNova+"</td><td></td><td></tr>";
+		
+		String msg =  "<table>" + "<thead style=color:blue>" + "<td><b>UserName</b></td><td></td>"
+				  + "<td><b>Password</b></td><td></td>"+"</thead>" +
+				  "<tbody>"+body +"</tbody>" + "</table>";
+		
+		return mailConfig.sendEmail(email, subject, msg);
+		
+		
+	}
+	
+	/*
+	 * public String enviarEmail(PedidoEntity pedido) throws MessagingException {
+	 * ClienteEntity clienteDoPedido = pedido.getClienteId(); //String email =
+	 * clientedoPedido.getEmail(); String body =
+	 * "<tr><td></td><td></td><td></td></tr>"; List<PedidoProdutoEntity>
+	 * listaPedidoProduto = pedido.getPedidoProdutos(); Long qtde; Double preco;
+	 * String nomeProduto;
+	 * 
+	 * for (PedidoProdutoEntity pedidoProduto : listaPedidoProduto) {
+	 * 
+	 * ProdutoEntity produto = pedidoProduto.getProduto(); nomeProduto =
+	 * produto.getNome(); qtde = pedidoProduto.getQtde(); preco =
+	 * pedidoProduto.getPreco(); body =
+	 * body+"<tr><td>"+nomeProduto+"</td><td></td>"+"<td>"+qtde+"</td><td></td><td>"
+	 * +preco+"</td></tr>"; //listaTbody.add(body); }
+	 * 
+	 * 
+	 * String subject = "Parabéns pela sua compra "+clienteDoPedido.getNome();
+	 * String msg =
+	 * "<b>Pedido: </b>"+pedido.getNumeroPedido()+"<br><b>Valor total :</b> "+pedido
+	 * .getValorTotal() +"<br><b>Data da Entrega: </b>"+pedido.getDataEntrega()
+	 * +"<table>" + "<thead style=color:blue>" + "<td><b>Produto</b></td><td></td>"
+	 * + "<td><b>Qtdes</b></td><td></td>" +"<td><b>Preço</b></td>" +"</thead>" +
+	 * "<tbody>"+body +"</tbody>" + "</table>";
+	 * 
+	 * return mailConfig.sendEmail(clienteDoPedido.getEmail(), subject, msg);
+	 * 
+	 * }
+	 */
 }

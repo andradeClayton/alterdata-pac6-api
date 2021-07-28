@@ -2,6 +2,8 @@ package org.serratec.java2backend.alterdatapac6.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 public class UsuarioDto {
 
 	private String nome;
@@ -12,6 +14,7 @@ public class UsuarioDto {
 	
 	private String userName;
 	
+	@JsonBackReference
 	private String password;
 	
 	private String equipe;
@@ -20,6 +23,7 @@ public class UsuarioDto {
 
 	private String email;
 	
+	@JsonBackReference
 	private Date dtNascimento;
 	
 	private String url;

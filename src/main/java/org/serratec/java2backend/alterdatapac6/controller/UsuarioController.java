@@ -3,6 +3,8 @@ package org.serratec.java2backend.alterdatapac6.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDto;
 import org.serratec.java2backend.alterdatapac6.entity.ImagemEntity;
 import org.serratec.java2backend.alterdatapac6.entity.UsuarioEntity;
@@ -35,14 +37,27 @@ public class UsuarioController {
 	ImagemService imagemService;
 	
 
+	/*
+	 * antes de colocar a url da imagem no dto
+	 * 
+	 * @GetMapping public List<UsuarioEntity> getAll(){ return service.getAll(); }
+	 */
+	
 	@GetMapping
-	public List<UsuarioEntity> getAll(){
+	public List<UsuarioDto> getAll(){
 		return service.getAll();
 	}
 
+	/*
+	 * antes de incluir a url da imagem no getusername
+	 * 
+	 * @GetMapping("/{userName}") public UsuarioEntity getByUserNome(@PathVariable
+	 * String userName) { return service.getByUserName(userName); }
+	 */
+	
 	@GetMapping("/{userName}")
-	public UsuarioEntity getByUserNome(@PathVariable String userName) {
-		return service.getByUserName(userName);
+	public UsuarioDto getByUserNome(@PathVariable String userName) {
+		return service.getByUserNameUrl(userName);
 	}
 	
 	/* antes da inclusão de imagens
@@ -95,5 +110,10 @@ public class UsuarioController {
 	 * ResponseEntity<byte[]>(imagem.getData(),header, HttpStatus.OK); }
 	 */
 	
+	
+	@PutMapping("/resetSenha/{userName}")
+	public String resetSenha(@PathVariable String userName) throws MessagingException {
+		return service.resetSenha(userName);
+	}
 	
 }

@@ -36,6 +36,7 @@ public class UsuarioMapper {
 		dto.setEquipe(entity.getEquipe().getNome());
 		dto.setStatus(entity.getStatus().getNome());
 		
+		
 		return dto;
 	}
 
