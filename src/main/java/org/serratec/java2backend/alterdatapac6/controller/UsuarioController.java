@@ -38,27 +38,29 @@ public class UsuarioController {
 	
 
 	/*
-	 * antes de colocar a url da imagem no dto
-	 * 
-	 * @GetMapping public List<UsuarioEntity> getAll(){ return service.getAll(); }
-	 */
+	  antes de colocar a url da imagem no dto*/
+	 
+	 @GetMapping 
+	 public List<UsuarioEntity> getAll(){ return service.getAll(); }
+	 
 	
-	@GetMapping
-	public List<UsuarioDto> getAll(){
-		return service.getAll();
-	}
+	/*
+	 * @GetMapping public List<UsuarioDto> getAll(){ return service.getAll(); }
+	 */
 
 	/*
-	 * antes de incluir a url da imagem no getusername
-	 * 
-	 * @GetMapping("/{userName}") public UsuarioEntity getByUserNome(@PathVariable
-	 * String userName) { return service.getByUserName(userName); }
-	 */
+	 * antes de incluir a url da imagem no getusername*/
+	  
+	@GetMapping("/{userName}") 
+	  public UsuarioEntity getByUserNome(@PathVariable String userName) {
+		  return service.getByUserName(userName);
+		  }
+	 
 	
-	@GetMapping("/{userName}")
-	public UsuarioDto getByUserNome(@PathVariable String userName) {
-		return service.getByUserNameUrl(userName);
-	}
+	/*
+	 * @GetMapping("/{userName}") public UsuarioDto getByUserNome(@PathVariable
+	 * String userName) { return service.getByUserNameUrl(userName); }
+	 */
 	
 	/* antes da inclusão de imagens
 	 * @PostMapping public UsuarioDto create(@RequestBody UsuarioDto usuario) throws

@@ -52,24 +52,25 @@ public class UsuarioService {
 	MailConfig mailConfig;
 	
 	/*
-	 * antes de incluir a url da imagem public List<UsuarioEntity> getAll() {
-	 * 
-	 * return repository.findAll(); }
-	 */
-	
-	public List<UsuarioDto> getAll() {
-		List<UsuarioEntity> listEntity = repository.findAll();
-		List<UsuarioDto> listDto = new ArrayList();
-		UsuarioDto usuarioDto;
-		for(UsuarioEntity entity:listEntity) {
-			//String userName = entity.getUserName();
-			//usuarioDto = getByUserNameUrl(userName); inclui a url da imagem, comentado até consertar o erro do heroku
-			usuarioDto = mapper.toDto(entity);
-			listDto.add(usuarioDto);
-		}
-		
-		return listDto;
+	  antes de incluir a url da imagem */
+	public List<UsuarioEntity> getAll() {
+
+		return repository.findAll();
 	}
+	 
+	 
+	 
+	
+	/*
+	 * public List<UsuarioDto> getAll() { List<UsuarioEntity> listEntity =
+	 * repository.findAll(); List<UsuarioDto> listDto = new ArrayList(); UsuarioDto
+	 * usuarioDto; for(UsuarioEntity entity:listEntity) { //String userName =
+	 * entity.getUserName(); //usuarioDto = getByUserNameUrl(userName); inclui a url
+	 * da imagem, comentado até consertar o erro do heroku usuarioDto =
+	 * mapper.toDto(entity); listDto.add(usuarioDto); }
+	 * 
+	 * return listDto; }
+	 */
 	
 
 	public UsuarioEntity getByUserName(String useName) {
