@@ -62,8 +62,9 @@ public class UsuarioService {
 		List<UsuarioDto> listDto = new ArrayList();
 		UsuarioDto usuarioDto;
 		for(UsuarioEntity entity:listEntity) {
-			String userName = entity.getUserName();
-			usuarioDto = getByUserNameUrl(userName);
+			//String userName = entity.getUserName();
+			//usuarioDto = getByUserNameUrl(userName); inclui a url da imagem, comentado até consertar o erro do heroku
+			usuarioDto = mapper.toDto(entity);
 			listDto.add(usuarioDto);
 		}
 		
@@ -79,7 +80,7 @@ public class UsuarioService {
 	
 	public UsuarioDto getByUserNameUrl(String userName) {
 		UsuarioEntity entity = repository.getByUserName(userName);
-		//UsuarioDto dto = addImageUrl(entity);
+		//UsuarioDto dto = addImageUrl(entity); comentado até consertar o erro do heroku
 		UsuarioDto dto = mapper.toDto(entity);
 		return dto;
 	}
