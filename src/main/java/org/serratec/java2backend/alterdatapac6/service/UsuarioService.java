@@ -79,7 +79,8 @@ public class UsuarioService {
 	
 	public UsuarioDto getByUserNameUrl(String userName) {
 		UsuarioEntity entity = repository.getByUserName(userName);
-		UsuarioDto dto = addImageUrl(entity);
+		//UsuarioDto dto = addImageUrl(entity);
+		UsuarioDto dto = mapper.toDto(entity);
 		return dto;
 	}
 
