@@ -177,7 +177,7 @@ public class UsuarioService {
 		
 		
 		StatusEntity status = statusRepository.getByNome(usuario.getStatus());
-		usuarioNovo.setStatus(status);
+		usuarioNovo.setStatus(status); 
 		
 		EquipeEntity equipe = equipeRepository.getByNome(usuario.getEquipe());
 		usuarioNovo.setEquipe(equipe);
