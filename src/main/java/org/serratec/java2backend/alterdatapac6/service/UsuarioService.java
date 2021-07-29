@@ -245,10 +245,10 @@ public class UsuarioService {
 		usuarioDto.setNickName(entity.getNickName());
 		
 		usuarioDto.setPapel(entity.getPapel().getNome());
-		//usuarioDto.setUserName(entity.getUserName());
-		//usuarioDto.setEquipe(entity.getEquipe().getNome());
-		//usuarioDto.setStatus(entity.getStatus().getNome());
-		//usuarioDto.setEmail(entity.getEmail());
+		usuarioDto.setUserName(entity.getUserName());
+		usuarioDto.setEquipe(entity.getEquipe().getNome());
+		usuarioDto.setStatus(entity.getStatus().getNome());
+		usuarioDto.setEmail(entity.getEmail());
 	
 		
 		
