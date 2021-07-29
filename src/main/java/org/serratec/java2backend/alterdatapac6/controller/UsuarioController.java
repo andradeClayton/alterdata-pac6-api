@@ -53,8 +53,8 @@ public class UsuarioController {
 	 * antes de incluir a url da imagem no getusername*/
 	  
 	@GetMapping("/{userName}") 
-	  public UsuarioDtoResponse getByUserNome(@PathVariable String userName) {
-		  return service.getByUserNameUrl(userName);
+	  public UsuarioEntity getByUserNome(@PathVariable String userName) {
+		  return service.getByUserName(userName);
 		  }
 	 
 	
