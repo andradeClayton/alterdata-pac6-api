@@ -172,16 +172,14 @@ public class UsuarioService {
 	public UsuarioEntity createUsuario(UsuarioDtoRequest usuario) {
 		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
 	
-		PapelEntity papel = new PapelEntity();
-		papel = papelRepository.getByNome(usuario.getPapel());
+		PapelEntity papel = papelRepository.getByNome(usuario.getPapel());
 		usuarioNovo.setPapel(papel);
 		
-		StatusEntity status = new StatusEntity();
-		status = statusRepository.getByNome(usuario.getStatus());
+		
+		StatusEntity status = statusRepository.getByNome(usuario.getStatus());
 		usuarioNovo.setStatus(status);
 		
-		EquipeEntity equipe = new EquipeEntity();
-		equipe = equipeRepository.getByNome(usuario.getEquipe());
+		EquipeEntity equipe = equipeRepository.getByNome(usuario.getEquipe());
 		usuarioNovo.setEquipe(equipe);
 		
 		usuarioNovo.setPassword(bCrypt.encode(usuarioNovo.getPassword()));
@@ -246,9 +244,7 @@ public class UsuarioService {
 		usuarioDto.setNome(entity.getNome());
 		usuarioDto.setNickName(entity.getNickName());
 		
-		PapelEntity papel = entity.getPapel();
-		String papelNome = papel.getNome();
-		usuarioDto.setPapel(papelNome);
+		usuarioDto.setPapel(entity.getPapel().getNome());
 		//usuarioDto.setUserName(entity.getUserName());
 		//usuarioDto.setEquipe(entity.getEquipe().getNome());
 		//usuarioDto.setStatus(entity.getStatus().getNome());
