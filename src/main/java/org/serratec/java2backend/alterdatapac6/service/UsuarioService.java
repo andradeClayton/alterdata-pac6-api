@@ -250,10 +250,11 @@ public class UsuarioService {
 		usuarioDto.setEquipe(entity.getEquipe().getNome());
 		usuarioDto.setStatus(entity.getStatus().getNome());
 		usuarioDto.setEmail(entity.getEmail());
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario/{usuarioId}/image")
-				.buildAndExpand(entity.getId()).toUri();
-		usuarioDto.setUrl(uri.toString());
+		/*
+		 * URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path(
+		 * "/usuario/{usuarioId}/image") .buildAndExpand(entity.getId()).toUri();
+		 * usuarioDto.setUrl(uri.toString());
+		 */
 		
 		//UsuarioDtoResponse dto = mapper.toDto(entity);
 		
