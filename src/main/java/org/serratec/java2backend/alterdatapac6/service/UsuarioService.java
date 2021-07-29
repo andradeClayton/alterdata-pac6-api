@@ -243,10 +243,10 @@ public class UsuarioService {
 		Optional<UsuarioEntity> entityOptional = repository.findById(entity.getId());
 		
 		UsuarioDtoResponse usuarioDto = new UsuarioDtoResponse();
-		usuarioDto.setNome(entity.getNome());
+		//usuarioDto.setNome(entity.getNome());
 		
 		
-		//UsuarioDtoResponse dto = mapper.toDto(entityOptional.get());
+		UsuarioDtoResponse dto = mapper.toDto(entity);
 		
 		
 		return usuarioDto;
