@@ -8,7 +8,8 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import org.serratec.java2backend.alterdatapac6.config.MailConfig;
-import org.serratec.java2backend.alterdatapac6.dto.UsuarioDto;
+import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoRequest;
+import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoResponse;
 import org.serratec.java2backend.alterdatapac6.entity.EquipeEntity;
 import org.serratec.java2backend.alterdatapac6.entity.PapelEntity;
 import org.serratec.java2backend.alterdatapac6.entity.StatusEntity;
@@ -79,10 +80,10 @@ public class UsuarioService {
 		
 	}
 	
-	public UsuarioDto getByUserNameUrl(String userName) {
+	public UsuarioDtoResponse getByUserNameUrl(String userName) {
 		UsuarioEntity entity = repository.getByUserName(userName);
-		//UsuarioDto dto = addImageUrl(entity); comentado até consertar o erro do heroku
-		UsuarioDto dto = mapper.toDto(entity);
+		UsuarioDtoResponse dto = addImageUrl(entity); //descomentei e vou subir para o heroku para testar se aparece a url
+		//UsuarioDtoResponse dto = mapper.toDto(entity);
 		return dto;
 	}
 
@@ -105,7 +106,7 @@ public class UsuarioService {
 	 */
 	
 	
-	public UsuarioDto update(UsuarioDto usuario) {
+	public UsuarioDtoResponse update(UsuarioDtoRequest usuario) {
 		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUserName());
 
 		if (usuario.getNome() != null) {
@@ -167,7 +168,7 @@ public class UsuarioService {
 
 
 
-	public UsuarioEntity createUsuario(UsuarioDto usuario) {
+	public UsuarioEntity createUsuario(UsuarioDtoRequest usuario) {
 		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
 	
 		PapelEntity papel = new PapelEntity();
@@ -189,11 +190,11 @@ public class UsuarioService {
 	}
 	
 	//retorna um DTO com a url da imagem
-	public UsuarioDto addImageUrl(UsuarioEntity entity) {
+	public UsuarioDtoResponse addImageUrl(UsuarioEntity entity) {
 		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario/{usuarioId}/image")
 				.buildAndExpand(entity.getId()).toUri();
 		
-		UsuarioDto usu = new UsuarioDto();
+		UsuarioDtoResponse usu = new UsuarioDtoResponse();
 		usu = mapper.toDto(entity);
 		usu.setUrl(uri.toString());
 		return usu;
@@ -202,7 +203,7 @@ public class UsuarioService {
 	
 	//retorna um entity com url da imagem para fazer teste
 	
-	public UsuarioDto create(UsuarioDto dto, MultipartFile file) throws IOException {
+	public UsuarioDtoResponse create(UsuarioDtoRequest dto, MultipartFile file) throws IOException {
 		
 		UsuarioEntity entitySaved = createUsuario(dto);
 		imagemService.create(entitySaved, file);

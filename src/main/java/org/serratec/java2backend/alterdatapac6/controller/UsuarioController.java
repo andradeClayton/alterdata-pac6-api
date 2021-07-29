@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import org.serratec.java2backend.alterdatapac6.dto.UsuarioDto;
+import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoRequest;
+import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoResponse;
 import org.serratec.java2backend.alterdatapac6.entity.ImagemEntity;
 import org.serratec.java2backend.alterdatapac6.entity.UsuarioEntity;
 import org.serratec.java2backend.alterdatapac6.service.ImagemService;
@@ -52,8 +53,8 @@ public class UsuarioController {
 	 * antes de incluir a url da imagem no getusername*/
 	  
 	@GetMapping("/{userName}") 
-	  public UsuarioEntity getByUserNome(@PathVariable String userName) {
-		  return service.getByUserName(userName);
+	  public UsuarioDtoResponse getByUserNome(@PathVariable String userName) {
+		  return service.getByUserNameUrl(userName);
 		  }
 	 
 	
@@ -68,7 +69,7 @@ public class UsuarioController {
 	 */
 	
 	@PutMapping
-	public UsuarioDto update(@RequestBody UsuarioDto usuario) {
+	public UsuarioDtoResponse update(@RequestBody UsuarioDtoRequest usuario) {
 		return service.update(usuario);
 	}
 	
@@ -80,7 +81,7 @@ public class UsuarioController {
 	
 
 	@PostMapping("/create")
-	public UsuarioDto create(@RequestParam MultipartFile file , @RequestPart UsuarioDto usuario) throws IOException {
+	public UsuarioDtoResponse create(@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException {
 		return service.create(usuario,file);
 	}
 	

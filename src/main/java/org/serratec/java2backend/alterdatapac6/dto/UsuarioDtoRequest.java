@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-public class UsuarioDto {
+public class UsuarioDtoRequest {
 
 	private String nome;
 
@@ -23,12 +23,12 @@ public class UsuarioDto {
 
 	private String email;
 	
-	@JsonBackReference
+	//@JsonBackReference
 	private Date dtNascimento;
 	
 	private String url;
 
-	public UsuarioDto() {
+	public UsuarioDtoRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
