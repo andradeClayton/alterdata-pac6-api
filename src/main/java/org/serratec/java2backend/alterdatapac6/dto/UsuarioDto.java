@@ -14,7 +14,7 @@ public class UsuarioDto {
 	
 	private String userName;
 	
-	@JsonBackReference
+	//@JsonBackReference
 	private String password;
 	
 	private String equipe;

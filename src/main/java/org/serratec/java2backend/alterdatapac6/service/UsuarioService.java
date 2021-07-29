@@ -188,6 +188,7 @@ public class UsuarioService {
 	
 	}
 	
+	//retorna um DTO com a url da imagem
 	public UsuarioDto addImageUrl(UsuarioEntity entity) {
 		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario/{usuarioId}/image")
 				.buildAndExpand(entity.getId()).toUri();
@@ -197,6 +198,9 @@ public class UsuarioService {
 		usu.setUrl(uri.toString());
 		return usu;
 	}
+	
+	
+	//retorna um entity com url da imagem para fazer teste
 	
 	public UsuarioDto create(UsuarioDto dto, MultipartFile file) throws IOException {
 		

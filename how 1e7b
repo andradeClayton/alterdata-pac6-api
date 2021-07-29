@@ -1,0 +1,89 @@
+[33mcommit d0e12fd565856ad5dccb2468511ceccc29254bff[m[33m ([m[1;36mHEAD -> [m[1;32mclayton[m[33m, [m[1;31mheroku/master[m[33m)[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Wed Jul 28 12:32:13 2021 -0300
+
+    exlusão do DTO devolvendo o cliente como entity
+
+[33mcommit 01a386c2aded052090e5026aa870c3f45e348cb7[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Wed Jul 28 12:20:29 2021 -0300
+
+    ocultando a url da imagem
+
+[33mcommit 3acd40ee6859ac42ca050cf04dce996de44d9145[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Wed Jul 28 11:10:48 2021 -0300
+
+    ocultando url da imagem
+
+[33mcommit 1e7b6d5dd73216259a7cc1e5325e00d8daa22a9c[m[33m ([m[1;31morigin/clayton[m[33m)[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Wed Jul 28 08:13:54 2021 -0300
+
+    inclusão do disparo de email para recuperação de senha
+
+[33mcommit 4a0eb96392b2f72a7304e1ca58c9f2d4a53081a7[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Tue Jul 27 15:51:46 2021 -0300
+
+    inclusão fo headerExposed, tirando o fdp do ;
+
+[33mcommit ab525024b871ba860623424f61b488d2cdb55a30[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Tue Jul 27 14:55:32 2021 -0300
+
+    iclusão do http.cors
+
+[33mcommit d442f5e0348cae5b3ac8a4bfc8bddabeff6430c9[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Tue Jul 27 14:07:51 2021 -0300
+
+    configuração de CORS
+
+[33mcommit 4765f85cbb2515516d40eb098b8c390f1e9483af[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Mon Jul 26 20:39:03 2021 -0300
+
+    aumentei a validade do token para 1h ou 3600000ms
+
+[33mcommit 8cdeb5c2bee31d377276549375fc10312c19aa05[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Mon Jul 26 18:37:18 2021 -0300
+
+    liberação do metodo POST para criação de usuario
+
+[33mcommit 4ab0c9784bcb3609afcaf3b9ac44b8e0e4097ba4[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Mon Jul 26 14:24:19 2021 -0300
+
+    API com JWT e armazenamento de imagem
+
+[33mcommit e4025bbf3af19d58e433834fb016ff1d845803e7[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Fri Jul 23 20:01:39 2021 -0300
+
+    inclusão da uniqueconstrain na entidade usuario
+
+[33mcommit ae3f418f469d1c0e70c111bdeffeb92a6b5ff341[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Fri Jul 23 19:57:22 2021 -0300
+
+    incusão da uniqconstrain na entidade status
+
+[33mcommit d9ca81d44e949c67b92cf546acc891f8521c5ba3[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Fri Jul 23 19:54:56 2021 -0300
+
+    inclusão do @unique constrain na entidade papel
+
+[33mcommit 8a6aec3e5fc7d2eb6dd5715a342c1f94c175f4d8[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Fri Jul 23 19:51:23 2021 -0300
+
+    inclusão da clausula unique na entidade equipe
+
+[33mcommit a54fe3a93dbd9454a2edf5482a62c5b90100eadd[m[33m ([m[1;31morigin/willian[m[33m, [m[1;31morigin/marcelo[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/luca[m[33m, [m[1;32mwillian[m[33m, [m[1;32mmarcelo[m[33m, [m[1;32mmain[m[33m, [m[1;32mluca[m[33m)[m
+Author: andradeClayton <sussatere@gmail.com>
+Date:   Fri Jul 23 14:45:50 2021 -0300
+
+    Alterdata-pac6-api crud básico

@@ -39,7 +39,7 @@ public class UsuarioEntity {
 	
 	private String userName;
 	
-	@JsonBackReference
+	//@JsonBackReference
 	private String password;
 	
 	
