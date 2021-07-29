@@ -119,4 +119,12 @@ public class UsuarioController {
 		return service.resetSenha(userName);
 	}
 	
+	//===========================================29/07/21======================================================
+	
+	@GetMapping("/dto/{userName}")
+	public UsuarioDtoResponse getByUserNameDto(@PathVariable String userName) {
+		return service.getByUserNameDto(userName);
+	}
+	
+	
 }

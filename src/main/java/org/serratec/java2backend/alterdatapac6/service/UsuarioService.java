@@ -235,33 +235,13 @@ public class UsuarioService {
 		
 	}
 	
-	/*
-	 * public String enviarEmail(PedidoEntity pedido) throws MessagingException {
-	 * ClienteEntity clienteDoPedido = pedido.getClienteId(); //String email =
-	 * clientedoPedido.getEmail(); String body =
-	 * "<tr><td></td><td></td><td></td></tr>"; List<PedidoProdutoEntity>
-	 * listaPedidoProduto = pedido.getPedidoProdutos(); Long qtde; Double preco;
-	 * String nomeProduto;
-	 * 
-	 * for (PedidoProdutoEntity pedidoProduto : listaPedidoProduto) {
-	 * 
-	 * ProdutoEntity produto = pedidoProduto.getProduto(); nomeProduto =
-	 * produto.getNome(); qtde = pedidoProduto.getQtde(); preco =
-	 * pedidoProduto.getPreco(); body =
-	 * body+"<tr><td>"+nomeProduto+"</td><td></td>"+"<td>"+qtde+"</td><td></td><td>"
-	 * +preco+"</td></tr>"; //listaTbody.add(body); }
-	 * 
-	 * 
-	 * String subject = "Parabéns pela sua compra "+clienteDoPedido.getNome();
-	 * String msg =
-	 * "<b>Pedido: </b>"+pedido.getNumeroPedido()+"<br><b>Valor total :</b> "+pedido
-	 * .getValorTotal() +"<br><b>Data da Entrega: </b>"+pedido.getDataEntrega()
-	 * +"<table>" + "<thead style=color:blue>" + "<td><b>Produto</b></td><td></td>"
-	 * + "<td><b>Qtdes</b></td><td></td>" +"<td><b>Preço</b></td>" +"</thead>" +
-	 * "<tbody>"+body +"</tbody>" + "</table>";
-	 * 
-	 * return mailConfig.sendEmail(clienteDoPedido.getEmail(), subject, msg);
-	 * 
-	 * }
-	 */
+	//=========================================Tere 29/07/21=======================================
+	 
+	public UsuarioDtoResponse getByUserNameDto(String userName) {
+		UsuarioEntity entity= getByUserName(userName);
+		UsuarioDtoResponse dto = mapper.toDto(entity);
+		return dto;
+	}
+	
+	
 }
