@@ -82,8 +82,8 @@ public class UsuarioService {
 	
 	public UsuarioDtoResponse getByUserNameUrl(String userName) {
 		UsuarioEntity entity = repository.getByUserName(userName);
-		UsuarioDtoResponse dto = addImageUrl(entity); //descomentei e vou subir para o heroku para testar se aparece a url
-		//UsuarioDtoResponse dto = mapper.toDto(entity);
+		//UsuarioDtoResponse dto = addImageUrl(entity); //descomentei e vou subir para o heroku para testar se aparece a url
+		UsuarioDtoResponse dto = mapper.toDto(entity);
 		return dto;
 	}
 
