@@ -240,15 +240,17 @@ public class UsuarioService {
 		UsuarioEntity entity = getByUserName(userName);
 		//Optional<UsuarioEntity> entityOptional = repository.findById(entity.getId());
 		
-		UsuarioDtoResponse usuarioDto = new UsuarioDtoResponse();
-		usuarioDto.setNome(entity.getNome());
-		usuarioDto.setNickName(entity.getNickName());
-		
-		usuarioDto.setPapel(entity.getPapel().getNome());
-		usuarioDto.setUserName(entity.getUserName());
-		usuarioDto.setEquipe(entity.getEquipe().getNome());
-		usuarioDto.setStatus(entity.getStatus().getNome());
-		usuarioDto.setEmail(entity.getEmail());
+		/*
+		 * UsuarioDtoResponse usuarioDto = new UsuarioDtoResponse();
+		 * usuarioDto.setNome(entity.getNome());
+		 * usuarioDto.setNickName(entity.getNickName());
+		 * 
+		 * usuarioDto.setPapel(entity.getPapel().getNome());
+		 * usuarioDto.setUserName(entity.getUserName());
+		 * usuarioDto.setEquipe(entity.getEquipe().getNome());
+		 * usuarioDto.setStatus(entity.getStatus().getNome());
+		 * usuarioDto.setEmail(entity.getEmail());
+		 */
 	
 		
 		
@@ -260,7 +262,7 @@ public class UsuarioService {
 		
 		//UsuarioDtoResponse dto = mapper.toDto(entity);
 		
-		
+		UsuarioDtoResponse usuarioDto = mapper.toDto(entity);
 		return usuarioDto;
 	}
 	
