@@ -31,12 +31,26 @@ public class PapelEntity {
 	@JsonIgnore
 	private List<UsuarioEntity> usuario;
 	
-	
+	String cor;
 
 	public PapelEntity() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+	public String getCor() {
+		return cor;
+	}
+
+
+
+	public void setCor(String cor) {
+		this.cor = cor;
+	}
+
+
 
 	public Long getId() {
 		return id;

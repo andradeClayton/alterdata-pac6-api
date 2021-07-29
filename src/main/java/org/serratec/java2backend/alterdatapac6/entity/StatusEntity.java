@@ -28,7 +28,7 @@ public class StatusEntity {
 	@JsonIgnore
 	private List<UsuarioEntity> usuarios;
 	
-	
+	String emogi;
 
 	public StatusEntity() {
 		super();
@@ -37,6 +37,21 @@ public class StatusEntity {
 
 	
 	
+	
+	public String getEmogi() {
+		return emogi;
+	}
+
+
+
+
+	public void setEmogi(String emogi) {
+		this.emogi = emogi;
+	}
+
+
+
+
 	public String getDescricao() {
 		return descricao;
 	}
