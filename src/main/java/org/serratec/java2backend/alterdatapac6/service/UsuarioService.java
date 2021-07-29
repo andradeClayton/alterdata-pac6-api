@@ -261,8 +261,15 @@ public class UsuarioService {
 		 */
 		
 		//UsuarioDtoResponse dto = mapper.toDto(entity);
-		
+				
 		UsuarioDtoResponse usuarioDto = mapper.toDto(entity);
+		
+		
+		 URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path(
+		 "/usuario/{usuarioId}/image") .buildAndExpand(entity.getId()).toUri();
+		 usuarioDto.setUrl(uri.toString());
+		
+		
 		return usuarioDto;
 	}
 	
