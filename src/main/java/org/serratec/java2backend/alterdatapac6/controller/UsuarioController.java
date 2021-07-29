@@ -122,7 +122,7 @@ public class UsuarioController {
 	//===========================================29/07/21======================================================
 	
 	@GetMapping("/dto/{userName}")
-	public UsuarioEntity getByUserNameDto(@PathVariable String userName) {
+	public UsuarioDtoResponse getByUserNameDto(@PathVariable String userName) {
 		return service.getByUserNameDto(userName);
 	}
 	

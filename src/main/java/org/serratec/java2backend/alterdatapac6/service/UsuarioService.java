@@ -238,10 +238,11 @@ public class UsuarioService {
 	
 	//=========================================Tere 29/07/21=======================================
 	 
-	public UsuarioEntity getByUserNameDto(String userName) {
-		Optional <UsuarioEntity> entity= repository.findByUserName(userName);
-		
-		return entity.get();
+	public UsuarioDtoResponse getByUserNameDto(String userName) {
+		UsuarioEntity entity = getByUserName(userName);
+		Optional<UsuarioEntity> entityOptional = repository.findById(entity.getId());
+		UsuarioDtoResponse dto = mapper.toDto(entityOptional.get());
+		return dto;
 	}
 	
 	
