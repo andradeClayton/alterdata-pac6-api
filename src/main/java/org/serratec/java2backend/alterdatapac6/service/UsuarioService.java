@@ -249,7 +249,7 @@ public class UsuarioService {
 		UsuarioDtoResponse dto = mapper.toDto(entity);
 		
 		
-		return usuarioDto;
+		return dto;
 	}
 	
 	
