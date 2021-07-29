@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.mail.MessagingException;
 
@@ -237,10 +238,10 @@ public class UsuarioService {
 	
 	//=========================================Tere 29/07/21=======================================
 	 
-	public UsuarioDtoResponse getByUserNameDto(String userName) {
-		UsuarioEntity entity= getByUserName(userName);
-		UsuarioDtoResponse dto = mapper.toDto(entity);
-		return dto;
+	public UsuarioEntity getByUserNameDto(String userName) {
+		Optional <UsuarioEntity> entity= repository.findByUserName(userName);
+		
+		return entity.get();
 	}
 	
 	
