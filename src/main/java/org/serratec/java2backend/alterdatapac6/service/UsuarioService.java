@@ -240,17 +240,30 @@ public class UsuarioService {
 	 
 	public UsuarioDtoResponse getByUserNameDto(String userName) {
 		UsuarioEntity entity = getByUserName(userName);
-		Optional<UsuarioEntity> entityOptional = repository.findById(entity.getId());
+		//Optional<UsuarioEntity> entityOptional = repository.findById(entity.getId());
 		
 		UsuarioDtoResponse usuarioDto = new UsuarioDtoResponse();
-		//usuarioDto.setNome(entity.getNome());
+		usuarioDto.setNome(entity.getNome());
+		usuarioDto.setNickName(entity.getNickName());
+		usuarioDto.setPapel(entity.getPapel().getNome());
+		usuarioDto.setUserName(entity.getUserName());
+		usuarioDto.setEquipe(entity.getEquipe().getNome());
+		usuarioDto.setStatus(entity.getStatus().getNome());
+		usuarioDto.setEmail(entity.getEmail());
+		
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario/{usuarioId}/image")
+				.buildAndExpand(entity.getId()).toUri();
+		usuarioDto.setUrl(uri.toString());
+		
+		//UsuarioDtoResponse dto = mapper.toDto(entity);
 		
 		
-		UsuarioDtoResponse dto = mapper.toDto(entity);
-		
-		
-		return dto;
+		return usuarioDto;
 	}
 	
 	
 }
+
+
+
+
