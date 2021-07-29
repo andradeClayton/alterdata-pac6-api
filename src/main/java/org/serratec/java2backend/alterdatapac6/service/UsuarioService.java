@@ -246,8 +246,9 @@ public class UsuarioService {
 		usuarioDto.setNome(entity.getNome());
 		usuarioDto.setNickName(entity.getNickName());
 		
+		PapelEntity papel = entity.getPapel();
 		
-		usuarioDto.setPapel(entity.getPapel().getNome().toString());
+		usuarioDto.setPapel(papel.getNome());
 		//usuarioDto.setUserName(entity.getUserName());
 		//usuarioDto.setEquipe(entity.getEquipe().getNome());
 		//usuarioDto.setStatus(entity.getStatus().getNome());
