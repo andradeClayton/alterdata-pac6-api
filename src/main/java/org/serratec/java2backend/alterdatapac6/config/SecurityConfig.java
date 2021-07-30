@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	JWTUtil jwtUtil;
 	
-	private static final String[] AUTH_WHITELIST = {"/usuario/resetSenha/**"};
+	private static final String[] AUTH_WHITELIST = {"/usuario/resetSenha/**","/usuario/**/image"};
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
