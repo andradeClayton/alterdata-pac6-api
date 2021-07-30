@@ -15,6 +15,7 @@ import org.serratec.java2backend.alterdatapac6.entity.EquipeEntity;
 import org.serratec.java2backend.alterdatapac6.entity.PapelEntity;
 import org.serratec.java2backend.alterdatapac6.entity.StatusEntity;
 import org.serratec.java2backend.alterdatapac6.entity.UsuarioEntity;
+import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioNotFoundException;
 import org.serratec.java2backend.alterdatapac6.mapper.UsuarioMapper;
 import org.serratec.java2backend.alterdatapac6.repository.EquipeRepository;
 import org.serratec.java2backend.alterdatapac6.repository.PapelRepository;
@@ -23,8 +24,11 @@ import org.serratec.java2backend.alterdatapac6.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javassist.NotFoundException;
 
 @Service
 public class UsuarioService {
@@ -74,11 +78,40 @@ public class UsuarioService {
 	 * return listDto; }
 	 */
 	
+	public List<UsuarioDtoResponse> getAllUser() throws UsuarioNotFoundException{
+		List<UsuarioEntity> listEntity = repository.findAll();
+		List<UsuarioDtoResponse> listDto = new ArrayList();
+		
+		for(UsuarioEntity entity :listEntity) {
+			UsuarioDtoResponse dto = getByUserName(entity.getUserName());
+			listDto.add(dto);
+		}
+		
+		return listDto;
+	}
+	
 
-	public UsuarioEntity getByUserName(String useName) {
-		return repository.getByUserName(useName);
+	public UsuarioDtoResponse getByUserName(String userName) throws UsuarioNotFoundException{
+	
+		UsuarioEntity entity = repository.getByUserName(userName);
+		
+		if(entity ==null) {
+			throw new UsuarioNotFoundException("Usuario não encontrado");
+		}
+		
+		UsuarioDtoResponse usuarioDto = mapper.toDto(entity);
+		String uri = adicionaUrlImagem(entity);
+		usuarioDto.setUrl(uri);
+				
+		return usuarioDto;
 		
 		
+	}
+	
+	public String adicionaUrlImagem(UsuarioEntity entity) {
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path(
+			    "/usuario/{usuarioId}/image") .buildAndExpand(entity.getId()).toUri();
+		return uri.toString();
 	}
 	
 	public UsuarioDtoResponse getByUserNameUrl(String userName) {
@@ -88,23 +121,6 @@ public class UsuarioService {
 		return dto;
 	}
 
-	/* antes de incluir a imagem
-	 * public UsuarioDto create(UsuarioDto usuario) { UsuarioEntity usuarioNovo =
-	 * mapper.toEntity(usuario);
-	 * 
-	 * PapelEntity papel = new PapelEntity(); papel =
-	 * papelRepository.getByNome(usuario.getPapel()); usuarioNovo.setPapel(papel);
-	 * 
-	 * StatusEntity status = new StatusEntity(); status =
-	 * statusRepository.getByNome(usuario.getStatus());
-	 * usuarioNovo.setStatus(status);
-	 * 
-	 * EquipeEntity equipe = new EquipeEntity(); equipe =
-	 * equipeRepository.getByNome(usuario.getEquipe());
-	 * usuarioNovo.setEquipe(equipe);
-	 * 
-	 * return mapper.toDto(repository.save(usuarioNovo)); }
-	 */
 	
 	
 	public UsuarioDtoResponse update(UsuarioDtoRequest usuario) {
@@ -161,7 +177,7 @@ public class UsuarioService {
 	
 	
 	public void deleteByUserName(String userName) {
-		UsuarioEntity usuario = getByUserName(userName);
+		UsuarioEntity usuario = repository.getByUserName(userName);
 		Long usuarioId = usuario.getId();
 
 		repository.deleteById(usuarioId);
@@ -188,32 +204,19 @@ public class UsuarioService {
 	
 	}
 	
-	//retorna um DTO com a url da imagem
-	public UsuarioDtoResponse addImageUrl(UsuarioEntity entity) {
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario/{usuarioId}/image")
-				.buildAndExpand(entity.getId()).toUri();
-		System.out.println(uri);
-		UsuarioDtoResponse usu = new UsuarioDtoResponse();
-		usu = mapper.toDto(entity);
-		String url = uri.toString();
-		usu.setUrl(url);
-		return usu;
-	}
-	
-	
-	//retorna um entity com url da imagem para fazer teste
-	
-	public UsuarioDtoResponse create(UsuarioDtoRequest dto, MultipartFile file) throws IOException {
+	//cria o usuario e retorna um UsuarioDtoResponse
+	public UsuarioDtoResponse create(UsuarioDtoRequest dto, MultipartFile file) throws IOException, UsuarioNotFoundException {
 		
 		UsuarioEntity entitySaved = createUsuario(dto);
 		imagemService.create(entitySaved, file);
-		return addImageUrl(entitySaved);
+		
+		return getByUserName(entitySaved.getUserName());
 	}
 
 	
 	public String resetSenha(String userName) throws MessagingException {
 		
-		UsuarioEntity entity = getByUserName(userName);
+		UsuarioEntity entity = repository.getByUserName(userName);
 		String email,senhaNova,usuario;
 		email = entity.getEmail();
 		usuario= entity.getUserName();
@@ -237,39 +240,14 @@ public class UsuarioService {
 	//=========================================Tere 29/07/21=======================================
 	 
 	public UsuarioDtoResponse getByUserNameDto(String userName) {
-		UsuarioEntity entity = getByUserName(userName);
-		//Optional<UsuarioEntity> entityOptional = repository.findById(entity.getId());
-		
-		/*
-		 * UsuarioDtoResponse usuarioDto = new UsuarioDtoResponse();
-		 * usuarioDto.setNome(entity.getNome());
-		 * usuarioDto.setNickName(entity.getNickName());
-		 * 
-		 * usuarioDto.setPapel(entity.getPapel().getNome());
-		 * usuarioDto.setUserName(entity.getUserName());
-		 * usuarioDto.setEquipe(entity.getEquipe().getNome());
-		 * usuarioDto.setStatus(entity.getStatus().getNome());
-		 * usuarioDto.setEmail(entity.getEmail());
-		 */
-	
-		
-		
-		/*
-		 * URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path(
-		 * "/usuario/{usuarioId}/image") .buildAndExpand(entity.getId()).toUri();
-		 * usuarioDto.setUrl(uri.toString());
-		 */
-		
-		//UsuarioDtoResponse dto = mapper.toDto(entity);
-				
+		UsuarioEntity entity = repository.getByUserName(userName);
+					
 		UsuarioDtoResponse usuarioDto = mapper.toDto(entity);
 		
-		
-		 URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path(
-		 "/usuario/{usuarioId}/image") .buildAndExpand(entity.getId()).toUri();
-		 usuarioDto.setUrl(uri.toString());
-		
-		
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path(
+	    "/usuario/{usuarioId}/image") .buildAndExpand(entity.getId()).toUri();
+		usuarioDto.setUrl(uri.toString());
+				
 		return usuarioDto;
 	}
 	

@@ -9,6 +9,7 @@ import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoRequest;
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoResponse;
 import org.serratec.java2backend.alterdatapac6.entity.ImagemEntity;
 import org.serratec.java2backend.alterdatapac6.entity.UsuarioEntity;
+import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioNotFoundException;
 import org.serratec.java2backend.alterdatapac6.service.ImagemService;
 import org.serratec.java2backend.alterdatapac6.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javassist.NotFoundException;
+
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -42,7 +45,10 @@ public class UsuarioController {
 	  antes de colocar a url da imagem no dto*/
 	 
 	 @GetMapping 
-	 public List<UsuarioEntity> getAll(){ return service.getAll(); }
+	 //public List<UsuarioEntity> getAll(){ return service.getAll(); }
+	 public List<UsuarioDtoResponse> getAll() throws UsuarioNotFoundException{
+		 return service.getAllUser();
+	 }
 	 
 	
 	/*
@@ -53,9 +59,11 @@ public class UsuarioController {
 	 * antes de incluir a url da imagem no getusername*/
 	  
 	@GetMapping("/{userName}") 
-	  public UsuarioEntity getByUserNome(@PathVariable String userName) {
-		  return service.getByUserName(userName);
-		  }
+	  public ResponseEntity<UsuarioDtoResponse> getByUserNome(@PathVariable String userName) throws UsuarioNotFoundException {
+		
+			return ResponseEntity.ok(service.getByUserName(userName));
+		
+	  }
 	 
 	
 	/*
@@ -81,7 +89,7 @@ public class UsuarioController {
 	
 
 	@PostMapping("/create")
-	public UsuarioDtoResponse create(@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException {
+	public UsuarioDtoResponse create(@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException {
 		return service.create(usuario,file);
 	}
 	
