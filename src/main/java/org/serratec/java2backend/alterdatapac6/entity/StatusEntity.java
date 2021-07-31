@@ -28,7 +28,7 @@ public class StatusEntity {
 	@JsonIgnore
 	private List<UsuarioEntity> usuarios;
 	
-	String emoji;
+	private String emoji;
 
 	public StatusEntity() {
 		super();
