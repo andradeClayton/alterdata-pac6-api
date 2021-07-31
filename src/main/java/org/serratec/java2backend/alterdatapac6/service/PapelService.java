@@ -39,6 +39,10 @@ public class PapelService {
 		if (papelNovo.getDescricao() != null) {
 			papelHist.setDescricao(papelNovo.getDescricao());
 		}
+		
+		if(papelNovo.getCor()!=null) {
+			papelHist.setCor(papelNovo.getCor());
+		}
 		return mapper.toDto(repository.save(papelHist));
 
 	}

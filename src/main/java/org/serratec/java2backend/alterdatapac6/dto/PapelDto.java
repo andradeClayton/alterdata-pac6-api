@@ -5,11 +5,27 @@ public class PapelDto {
 	private String nome;
 	
 	private String descricao;
+	
+	private String cor;
 
 	public PapelDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+	public String getCor() {
+		return cor;
+	}
+
+
+
+	public void setCor(String cor) {
+		this.cor = cor;
+	}
+
+
 
 	public String getNome() {
 		return nome;
