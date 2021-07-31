@@ -11,6 +11,7 @@ public class StatusMapper {
 		StatusEntity entity = new StatusEntity();
 		entity.setNome(dto.getNome());
 		entity.setDescricao(dto.getDescricao());
+		entity.setEmoji(dto.getEmoji());
 		
 		return entity;
 	}
@@ -19,6 +20,7 @@ public class StatusMapper {
 		StatusDto dto = new StatusDto();
 		dto.setNome(entity.getNome());
 		dto.setDescricao(entity.getDescricao());
+		dto.setEmoji(entity.getEmoji());
 	
 		return dto;
 	}

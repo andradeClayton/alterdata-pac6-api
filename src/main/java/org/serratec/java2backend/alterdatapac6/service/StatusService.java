@@ -39,6 +39,10 @@ public class StatusService {
 		if (statusNovo.getDescricao() != null) {
 			statusHist.setDescricao(statusNovo.getDescricao());
 		}
+		
+		if(statusNovo.getEmoji()!=null) {
+			statusHist.setEmoji(statusNovo.getEmoji());
+		}
 		return mapper.toDto(repository.save(statusHist));
 
 	}

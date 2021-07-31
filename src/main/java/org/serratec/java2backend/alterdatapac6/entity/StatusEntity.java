@@ -28,7 +28,7 @@ public class StatusEntity {
 	@JsonIgnore
 	private List<UsuarioEntity> usuarios;
 	
-	String emogi;
+	String emoji;
 
 	public StatusEntity() {
 		super();
@@ -38,15 +38,15 @@ public class StatusEntity {
 	
 	
 	
-	public String getEmogi() {
-		return emogi;
+	public String getEmoji() {
+		return emoji;
 	}
 
 
 
 
-	public void setEmogi(String emogi) {
-		this.emogi = emogi;
+	public void setEmoji(String emogi) {
+		this.emoji = emogi;
 	}
 
 
