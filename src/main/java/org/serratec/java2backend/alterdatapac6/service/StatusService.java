@@ -36,8 +36,12 @@ public class StatusService {
 		StatusEntity statusNovo = mapper.toEntity(status);
 		StatusEntity statusHist = repository.getByNome(statusNovo.getNome());
 
-		if (statusNovo.getDescricao() != null) {
-			statusHist.setDescricao(statusNovo.getDescricao());
+		/*
+		 * if (statusNovo.getDescricao() != null) {
+		 * statusHist.setDescricao(statusNovo.getDescricao()); }
+		 */
+		if(statusNovo.getEmoji()!=null) {
+			statusHist.setEmoji(statusNovo.getEmoji());
 		}
 		return mapper.toDto(repository.save(statusHist));
 
