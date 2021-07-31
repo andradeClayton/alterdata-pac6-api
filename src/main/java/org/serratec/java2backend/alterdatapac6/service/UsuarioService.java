@@ -12,12 +12,14 @@ import org.serratec.java2backend.alterdatapac6.config.MailConfig;
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoRequest;
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoResponse;
 import org.serratec.java2backend.alterdatapac6.entity.EquipeEntity;
+import org.serratec.java2backend.alterdatapac6.entity.ImagemEntity;
 import org.serratec.java2backend.alterdatapac6.entity.PapelEntity;
 import org.serratec.java2backend.alterdatapac6.entity.StatusEntity;
 import org.serratec.java2backend.alterdatapac6.entity.UsuarioEntity;
 import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioNotFoundException;
 import org.serratec.java2backend.alterdatapac6.mapper.UsuarioMapper;
 import org.serratec.java2backend.alterdatapac6.repository.EquipeRepository;
+import org.serratec.java2backend.alterdatapac6.repository.ImagemRepository;
 import org.serratec.java2backend.alterdatapac6.repository.PapelRepository;
 import org.serratec.java2backend.alterdatapac6.repository.StatusRepository;
 import org.serratec.java2backend.alterdatapac6.repository.UsuarioRepository;
@@ -32,6 +34,7 @@ import javassist.NotFoundException;
 
 @Service
 public class UsuarioService {
+	
 	
 	@Autowired
 	UsuarioRepository repository;
@@ -66,17 +69,6 @@ public class UsuarioService {
 	 
 	 
 	 
-	
-	/*
-	 * public List<UsuarioDto> getAll() { List<UsuarioEntity> listEntity =
-	 * repository.findAll(); List<UsuarioDto> listDto = new ArrayList(); UsuarioDto
-	 * usuarioDto; for(UsuarioEntity entity:listEntity) { //String userName =
-	 * entity.getUserName(); //usuarioDto = getByUserNameUrl(userName); inclui a url
-	 * da imagem, comentado até consertar o erro do heroku usuarioDto =
-	 * mapper.toDto(entity); listDto.add(usuarioDto); }
-	 * 
-	 * return listDto; }
-	 */
 	
 	public List<UsuarioDtoResponse> getAllUser() throws UsuarioNotFoundException{
 		List<UsuarioEntity> listEntity = repository.findAll();
@@ -176,14 +168,29 @@ public class UsuarioService {
 	
 	
 	
-	public void deleteByUserName(String userName) {
+	
+	public String deleteByUserName(String userName) {
+			
 		UsuarioEntity usuario = repository.getByUserName(userName);
-		Long usuarioId = usuario.getId();
-
-		repository.deleteById(usuarioId);
+		if(usuario !=null) {
+			Long usuarioId = usuario.getId();
+			
+			ImagemEntity imagem = imagemService.getImagem(usuarioId);
+			imagemService.deleteById(imagem.getId());
+			repository.deleteById(usuarioId);
+			return userName;
+			
+		}else {
+			return "";
+		}
+	
+		
+		
+		
 	}
 
 
+	
 
 	public UsuarioEntity createUsuario(UsuarioDtoRequest usuario) {
 		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);

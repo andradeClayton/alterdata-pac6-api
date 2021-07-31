@@ -7,4 +7,6 @@ public interface ImagemRepository extends JpaRepository<ImagemEntity, Long> {
 
 	ImagemEntity findByUsuarioId(Long id);
 
+	
+
 }

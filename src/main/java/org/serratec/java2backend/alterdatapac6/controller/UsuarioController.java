@@ -82,8 +82,15 @@ public class UsuarioController {
 	}
 	
 	@DeleteMapping("/{userName}")
-	public void deleteByUserName(@PathVariable String userName) {
-		service.deleteByUserName(userName);
+	public String deleteByUserName(@PathVariable String userName) {
+		String response = service.deleteByUserName(userName);
+		
+		if(response.equals(userName)) {
+			return "Usuário "+userName+" deletado com sucesso!";
+		}else {
+			return "Usuário não cadastrado!";
+		}
+		
 	}
 
 	
