@@ -22,13 +22,13 @@ public class StatusEntity {
 	
 	private String nome;
 	
-	private String descricao;
+	//private String descricao;
 	
 	@OneToMany(mappedBy = "status")
 	@JsonIgnore
 	private List<UsuarioEntity> usuarios;
 	
-	String emogi;
+	private String emoji;
 
 	public StatusEntity() {
 		super();
@@ -38,29 +38,27 @@ public class StatusEntity {
 	
 	
 	
-	public String getEmogi() {
-		return emogi;
+	public String getEmoji() {
+		return emoji;
 	}
 
 
 
 
-	public void setEmogi(String emogi) {
-		this.emogi = emogi;
+	public void setEmoji(String emoji) {
+		this.emoji = emoji;
 	}
 
 
 
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+	/*
+	 * public String getDescricao() { return descricao; }
+	 * 
+	 * 
+	 * 
+	 * public void setDescricao(String descricao) { this.descricao = descricao; }
+	 */
 
 
 

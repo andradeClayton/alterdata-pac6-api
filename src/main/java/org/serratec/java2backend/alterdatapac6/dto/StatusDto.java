@@ -4,12 +4,25 @@ public class StatusDto {
 
 	private String nome;
 
-	private String descricao;
+	//private String descricao;
+	
+	private String emoji;
 
 	public StatusDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	
+	public String getEmoji() {
+		return emoji;
+	}
+
+
+	public void setEmoji(String emoji) {
+		this.emoji = emoji;
+	}
+
 
 	public String getNome() {
 		return nome;
@@ -19,13 +32,10 @@ public class StatusDto {
 		this.nome = nome;
 	}
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
+	/*
+	 * public String getDescricao() { return descricao; }
+	 * 
+	 * public void setDescricao(String descricao) { this.descricao = descricao; }
+	 */
 	
 }
