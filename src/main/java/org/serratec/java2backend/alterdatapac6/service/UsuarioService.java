@@ -23,6 +23,7 @@ import org.serratec.java2backend.alterdatapac6.repository.ImagemRepository;
 import org.serratec.java2backend.alterdatapac6.repository.PapelRepository;
 import org.serratec.java2backend.alterdatapac6.repository.StatusRepository;
 import org.serratec.java2backend.alterdatapac6.repository.UsuarioRepository;
+import org.serratec.java2backend.alterdatapac6.util.GeraSenha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,8 @@ import javassist.NotFoundException;
 @Service
 public class UsuarioService {
 	
+	@Autowired
+	GeraSenha geraSenha;
 	
 	@Autowired
 	UsuarioRepository repository;
@@ -227,7 +230,7 @@ public class UsuarioService {
 		String email,senhaNova,usuario;
 		email = entity.getEmail();
 		usuario= entity.getUserName();
-		senhaNova = "ResetPac62021";
+		senhaNova =  geraSenha.geradorSenha(); //"ResetPac62021";
 		entity.setPassword(bCrypt.encode(senhaNova));
 		repository.save(entity);
 		
