@@ -32,10 +32,14 @@ public class PapelService {
 		return mapper.toDto(repository.save(papelNovo));
 	}
 
-	public PapelDto update(PapelDto papel) {
+	public PapelDto update(String nomePapel,PapelDto papel) {
 		PapelEntity papelNovo = mapper.toEntity(papel);
-		PapelEntity papelHist = repository.getByNome(papelNovo.getNome());
+		PapelEntity papelHist = repository.getByNome(nomePapel);
 
+		if (papelNovo.getNome() != null) {
+			papelHist.setNome(papelNovo.getNome());
+		}
+		
 		if (papelNovo.getDescricao() != null) {
 			papelHist.setDescricao(papelNovo.getDescricao());
 		}
@@ -46,7 +50,23 @@ public class PapelService {
 		return mapper.toDto(repository.save(papelHist));
 
 	}
-
+	
+	
+	/*
+	 * public PapelDto update(PapelDto papel) { PapelEntity papelNovo =
+	 * mapper.toEntity(papel); PapelEntity papelHist =
+	 * repository.getByNome(papelNovo.getNome());
+	 * 
+	 * if (papelNovo.getNome() != null) { papelHist.setNome(papelNovo.getNome()); }
+	 * 
+	 * if (papelNovo.getDescricao() != null) {
+	 * papelHist.setDescricao(papelNovo.getDescricao()); }
+	 * 
+	 * if(papelNovo.getCor()!=null) { papelHist.setCor(papelNovo.getCor()); } return
+	 * mapper.toDto(repository.save(papelHist));
+	 * 
+	 * }
+	 */
 	public void deleteByNome(String nome) {
 		PapelEntity papel = getByNome(nome);
 		Long papelId = papel.getId();

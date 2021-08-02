@@ -38,11 +38,15 @@ public class PapelController {
 		return service.create(papel);
 	}
 	
-	@PutMapping
-	public PapelDto update(@RequestBody PapelDto papel) {
-		return service.update(papel);
+	@PutMapping("/{nomePapel}")
+	public PapelDto update(@PathVariable String nomePapel, @RequestBody PapelDto papel) {
+		return service.update(nomePapel,papel);
 	}
 	
+	/*
+	 * @PutMapping public PapelDto update(@RequestBody PapelDto papel) { return
+	 * service.update(papel); }
+	 */
 	@DeleteMapping("/{nome}")
 	public void deleteByNome(@PathVariable String nome) {
 		service.deleteByNome(nome);

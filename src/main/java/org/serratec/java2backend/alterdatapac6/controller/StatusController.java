@@ -39,11 +39,16 @@ public class StatusController {
 		return service.create(Categoria);
 	}
 
-	@PutMapping()
-	public StatusDto update(@RequestBody StatusDto status)
+	@PutMapping("/{nomeStatus}")
+	public StatusDto update(@PathVariable String nomeStatus, @RequestBody StatusDto status)
 			throws NotFoundException {
-		return service.update(status);
+		return service.update(nomeStatus,status);
 	}
+	
+	/*
+	 * @PutMapping() public StatusDto update(@RequestBody StatusDto status) throws
+	 * NotFoundException { return service.update(status); }
+	 */
 
 	@DeleteMapping("/{nome}")
 	public void deleteByNome(@PathVariable String nome) {

@@ -38,10 +38,16 @@ public class EquipeController {
 		return service.create(papel);
 	}
 	
-	@PutMapping
-	public EquipeDto update(@RequestBody EquipeDto papel) {
-		return service.update(papel);
+	@PutMapping("/{nomeEquipe}")
+	public EquipeDto update(@PathVariable String nomeEquipe, @RequestBody EquipeDto equipe) {
+		return service.update(nomeEquipe,equipe);
 	}
+	
+	
+	/*
+	 * @PutMapping public EquipeDto update(@RequestBody EquipeDto papel) { return
+	 * service.update(papel); }
+	 */
 	
 	@DeleteMapping("/{nome}")
 	public void deleteByNome(@PathVariable String nome) {

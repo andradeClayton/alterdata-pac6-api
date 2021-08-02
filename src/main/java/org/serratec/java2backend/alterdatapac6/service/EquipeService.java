@@ -32,16 +32,35 @@ public class EquipeService {
 		return mapper.toDto(repository.save(equipeNova));
 	}
 
-	public EquipeDto update(EquipeDto equipe) {
+	public EquipeDto update(String nomeEquipe, EquipeDto equipe) {
 		EquipeEntity equipeNova = mapper.toEntity(equipe);
-		EquipeEntity equipeHist = repository.getByNome(equipeNova.getNome());
+		EquipeEntity equipeHist = repository.getByNome(nomeEquipe);
 
+		if(equipeNova.getNome()!=null) {
+			equipeHist.setNome(equipeNova.getNome());
+		}
+		
 		if (equipeNova.getDescricao() != null) {
 			equipeHist.setDescricao(equipeNova.getDescricao());
 		}
 		return mapper.toDto(repository.save(equipeHist));
 
 	}
+	
+	
+	/*
+	 * public EquipeDto update(EquipeDto equipe) { EquipeEntity equipeNova =
+	 * mapper.toEntity(equipe); EquipeEntity equipeHist =
+	 * repository.getByNome(equipeNova.getNome());
+	 * 
+	 * if(equipeNova.getNome()!=null) { equipeHist.setNome(equipeNova.getNome()); }
+	 * 
+	 * if (equipeNova.getDescricao() != null) {
+	 * equipeHist.setDescricao(equipeNova.getDescricao()); } return
+	 * mapper.toDto(repository.save(equipeHist));
+	 * 
+	 * }
+	 */
 
 	public void deleteByNome(String nome) {
 		EquipeEntity equipe = getByNome(nome);

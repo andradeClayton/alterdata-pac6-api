@@ -267,7 +267,7 @@ public class UsuarioService {
 		entity.setPassword(bCrypt.encode(senhaNova));
 		repository.save(entity);
 
-		String subject = "Reset de senha";
+		String subject = entity.getNome()+" - AlterDevs message";
 
 		String body = "<tr><td>" + usuario + "</td><td></td>" + "<td>" + senhaNova + "</td><td></td><td></tr>";
 

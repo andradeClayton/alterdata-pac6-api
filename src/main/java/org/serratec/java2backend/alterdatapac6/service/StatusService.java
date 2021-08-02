@@ -32,21 +32,34 @@ public class StatusService {
 		return mapper.toDto(repository.save(statusNovo));
 	}
 
-	public StatusDto update(StatusDto status) {
+	public StatusDto update(String nomeStatus,StatusDto status) {
 		StatusEntity statusNovo = mapper.toEntity(status);
-		StatusEntity statusHist = repository.getByNome(statusNovo.getNome());
+		StatusEntity statusHist = repository.getByNome(nomeStatus);
 
-		/*
-		 * if (statusNovo.getDescricao() != null) {
-		 * statusHist.setDescricao(statusNovo.getDescricao()); }
-		 */
+		if(statusNovo.getNome()!=null) {
+			statusHist.setNome(statusNovo.getNome());
+		}
+		
 		if(statusNovo.getEmoji()!=null) {
 			statusHist.setEmoji(statusNovo.getEmoji());
 		}
 		return mapper.toDto(repository.save(statusHist));
 
 	}
-
+	
+	
+	/*
+	 * public StatusDto update(StatusDto status) { StatusEntity statusNovo =
+	 * mapper.toEntity(status); StatusEntity statusHist =
+	 * repository.getByNome(statusNovo.getNome());
+	 * 
+	 * if(statusNovo.getNome()!=null) { statusHist.setNome(statusNovo.getNome()); }
+	 * 
+	 * if(statusNovo.getEmoji()!=null) { statusHist.setEmoji(statusNovo.getEmoji());
+	 * } return mapper.toDto(repository.save(statusHist));
+	 * 
+	 * }
+	 */
 	public void deleteByNome(String nome) {
 		StatusEntity status = getByNome(nome);
 		Long statusID = status.getId();
