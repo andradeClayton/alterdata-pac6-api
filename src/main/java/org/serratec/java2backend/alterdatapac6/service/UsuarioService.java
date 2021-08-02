@@ -63,8 +63,6 @@ public class UsuarioService {
 	@Autowired
 	MailConfig mailConfig;
 
-	
-
 	public List<UsuarioDtoResponse> getAllUser() throws NotFoundException {
 		List<UsuarioEntity> listEntity = repository.findAll();
 		List<UsuarioDtoResponse> listDto = new ArrayList();
@@ -77,7 +75,7 @@ public class UsuarioService {
 		return listDto;
 	}
 
-	public UsuarioDtoResponse getByUserName(String userName) throws NotFoundException{
+	public UsuarioDtoResponse getByUserName(String userName) throws NotFoundException {
 
 		UsuarioEntity entity = repository.getByUserName(userName);
 
@@ -106,44 +104,88 @@ public class UsuarioService {
 	 */
 
 	// 02/08/21 criação de metodo para controlar alteração de perfil
-	
-	/*
-	 * public UsuarioDtoResponse verificaPerfil(String userName,UsuarioDtoRequest
-	 * dto, MultipartFile file) throws IOException, NotFoundException {
-	 * if(userName.equals(dto.getUserName())) { return editaPerfilN1(dto,file); }
-	 * 
-	 * UsuarioEntity usuarioHist = repository.getByUserName(userName);
-	 * if(usuarioHist.getEquipe().equals(dto.getEquipe())) {
-	 * 
-	 * }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
-	
-	
-	// 01/08/21 metodo criado para editar perfil do usuário recebe dto e uma imagem e devolve um usuario response
-	public UsuarioDtoResponse editaPerfilN1 (UsuarioDtoRequest dto, MultipartFile file) throws IOException, NotFoundException {
+
+	public UsuarioDtoResponse verificaPerfil(String userName, UsuarioDtoRequest dto, MultipartFile file)
+			throws IOException, NotFoundException {
+		if (userName.equals(dto.getUserName())) {
+			return editaPerfilN1(dto, file);
+		}
+
+		UsuarioEntity usuarioHist = repository.getByUserName(userName);
+		if (usuarioHist.getEquipe().equals(dto.getEquipe())) {
+			return editaPerfilN2(dto);
+		}
+
+		return editaPerfilN3(userName, dto);
+
+	}
+
+	// 02/08/21 esse metodo pega a equipe do usuario ativo e replica para o usuario de outra equipe que terá o perfil alterado
+	public UsuarioDtoResponse editaPerfilN3(String userName, UsuarioDtoRequest dto) {
+
+		UsuarioEntity histUserName = repository.getByUserName(userName);
+		UsuarioEntity histDto = repository.getByUserName(dto.getUserName());
+
+		EquipeEntity equipe = new EquipeEntity();
+		equipe = histUserName.getEquipe();
+		histDto.setEquipe(equipe);
+
+		return mapper.toDto(repository.save(histDto));
+
+	}
+
+	//02/08/21 esse metodo altera alguns atributos do usuario da mesma equipe recebido como parametro
+	public UsuarioDtoResponse editaPerfilN2(UsuarioDtoRequest dto) {
+		UsuarioEntity usuarioHist = repository.getByUserName(dto.getUserName());
+
+		if (dto.getNickName() != null) {
+			usuarioHist.setNickName(dto.getNickName());
+		}
+
+		if (dto.getPapel() != null) {
+			PapelEntity papel = new PapelEntity();
+			papel = papelRepository.getByNome(dto.getPapel());
+			usuarioHist.setPapel(papel);
+
+		}
+
+		if (dto.getEquipe() != null) {
+			EquipeEntity equipe = new EquipeEntity();
+			equipe = equipeRepository.getByNome(dto.getEquipe());
+			usuarioHist.setEquipe(equipe);
+		}
+
+		if (dto.getStatus() != null) {
+			StatusEntity status = new StatusEntity();
+			status = statusRepository.getByNome(dto.getStatus());
+			usuarioHist.setStatus(status);
+		}
+
+		return mapper.toDto(repository.save(usuarioHist));
+
+	}
+
+	// 01/08/21 metodo criado para editar perfil do usuário recebe dto e uma imagem
+	// e devolve um usuario response
+	public UsuarioDtoResponse editaPerfilN1(UsuarioDtoRequest dto, MultipartFile file)
+			throws IOException, NotFoundException {
 		UsuarioEntity usuarioEditado = updateN1(dto);
-		
+
 		Long usuarioId = usuarioEditado.getId();
 
 		ImagemEntity imagem = imagemService.getImagem(usuarioId);
-		if(imagem!=null) {
+		if (imagem != null) {
 			imagemService.deleteById(imagem.getId());
 		}
-			
+
 		imagemService.create(usuarioEditado, file);
 
 		return getByUserName(usuarioEditado.getUserName());
-		
-		
+
 	}
-	
-	
-	// 01/08/21 --  modifiquei o retorno do método para ser compatível com editaPerfil(), que recebe um entity
+
+	// 01/08/21 -- modifiquei o retorno do método para ser compatível com
+	// editaPerfil(), que recebe um entity
 	public UsuarioEntity updateN1(UsuarioDtoRequest usuario) {
 		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUserName());
 
@@ -190,8 +232,7 @@ public class UsuarioService {
 			usuarioHist.setDtNascimento(usuario.getDtNascimento());
 		}
 
-		
-		//return mapper.toDto(repository.save(usuarioHist));
+		// return mapper.toDto(repository.save(usuarioHist));
 		return repository.save(usuarioHist);
 
 	}
@@ -213,43 +254,39 @@ public class UsuarioService {
 
 	}
 
-	
-	public String criaPerfil (UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
+	public String criaPerfil(UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
 		String senhaNova;
 		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
-		
-		String userName,nome,padraoUser="alterdata.";
+
+		String userName, nome, padraoUser = "alterdata.";
 		Integer posicaoEspaco;
-		
-		//cria o suarName a partir do nome
+
+		// cria o suarName a partir do nome
 		nome = usuario.getNome().toLowerCase();
 		posicaoEspaco = nome.indexOf(" ");
-		userName = padraoUser+nome.substring(0, posicaoEspaco);
+		userName = padraoUser + nome.substring(0, posicaoEspaco);
 		usuarioNovo.setUserName(userName);
-		
-		//gera uma senha aleatória
+
+		// gera uma senha aleatória
 		senhaNova = geraSenha.geradorSenha(); // "ResetPac62021";
 		usuarioNovo.setPassword(bCrypt.encode(senhaNova));
-		
+
 		// capatura a imagem do usuario admim para servir como imagem inical do perfil
 		UsuarioEntity usuarioAdmin = repository.getByUserName("alterdata.admin");
 		ImagemEntity imagemAdmin = usuarioAdmin.getImagem();
 		usuarioNovo.setImagem(imagemAdmin);
-		
-		//usuarioNovo.setNickName(null);
-		
+
+		// usuarioNovo.setNickName(null);
+
 		EquipeEntity equipe = equipeRepository.getByNome(usuario.getEquipe());
 		usuarioNovo.setEquipe(equipe);
-	
+
 		repository.save(usuarioNovo);
-		
+
 		return resetSenha(userName);
-		 
-		
-		
-		
+
 	}
-	
+
 	public UsuarioEntity createUsuario(UsuarioDtoRequest usuario) {
 		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
 
@@ -267,10 +304,8 @@ public class UsuarioService {
 
 	}
 
-	
 	// cria o usuario e retorna um UsuarioDtoResponse
-	public UsuarioDtoResponse create(UsuarioDtoRequest dto, MultipartFile file)
-			throws IOException, NotFoundException {
+	public UsuarioDtoResponse create(UsuarioDtoRequest dto, MultipartFile file) throws IOException, NotFoundException {
 
 		UsuarioEntity entitySaved = createUsuario(dto);
 		imagemService.create(entitySaved, file);
@@ -278,7 +313,6 @@ public class UsuarioService {
 		return getByUserName(entitySaved.getUserName());
 	}
 
-	
 	public String resetSenha(String userName) throws MessagingException {
 
 		UsuarioEntity entity = repository.getByUserName(userName);
@@ -289,7 +323,7 @@ public class UsuarioService {
 		entity.setPassword(bCrypt.encode(senhaNova));
 		repository.save(entity);
 
-		String subject = entity.getNome()+" - AlterDevs message";
+		String subject = entity.getNome() + " - AlterDevs message";
 
 		String body = "<tr><td>" + usuario + "</td><td></td>" + "<td>" + senhaNova + "</td><td></td><td></tr>";
 
@@ -300,7 +334,8 @@ public class UsuarioService {
 
 	}
 
-	// =========================================Tere 29/07/21=======================================
+	// =========================================Tere
+	// 29/07/21=======================================
 
 	public UsuarioDtoResponse getByUserNameDto(String userName) {
 		UsuarioEntity entity = repository.getByUserName(userName);
