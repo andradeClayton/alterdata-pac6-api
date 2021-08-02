@@ -105,22 +105,23 @@ public class UsuarioService {
 
 	// 02/08/21 criação de metodo para controlar alteração de perfil
 
-	public UsuarioDtoResponse verificaPerfil(String userName, UsuarioDtoRequest dto, MultipartFile file)
-			throws IOException, NotFoundException {
-		if (userName.equals(dto.getUserName())) {
-			return editaPerfilN1(dto, file);
-		}
+	/*
+	 * public UsuarioDtoResponse verificaPerfil(String userName, UsuarioDtoRequest
+	 * dto, MultipartFile file) throws IOException, NotFoundException {
+	 * 
+	 * if (userName.equals(dto.getUserName())) { return editaPerfilN1(dto, file); }
+	 * 
+	 * UsuarioEntity usuarioHist = repository.getByUserName(userName); if
+	 * (usuarioHist.getEquipe().equals(dto.getEquipe())) { return
+	 * editaPerfilN2(dto); }
+	 * 
+	 * return editaPerfilN3(userName, dto);
+	 * 
+	 * }
+	 */
 
-		UsuarioEntity usuarioHist = repository.getByUserName(userName);
-		if (usuarioHist.getEquipe().equals(dto.getEquipe())) {
-			return editaPerfilN2(dto);
-		}
-
-		return editaPerfilN3(userName, dto);
-
-	}
-
-	// 02/08/21 esse metodo pega a equipe do usuario ativo e replica para o usuario de outra equipe que terá o perfil alterado
+	// 02/08/21 esse metodo pega a equipe do usuario ativo e replica para o usuario
+	// de outra equipe que terá o perfil alterado
 	public UsuarioDtoResponse editaPerfilN3(String userName, UsuarioDtoRequest dto) {
 
 		UsuarioEntity histUserName = repository.getByUserName(userName);
@@ -134,60 +135,72 @@ public class UsuarioService {
 
 	}
 
-	//02/08/21 esse metodo altera alguns atributos do usuario da mesma equipe recebido como parametro
-	public UsuarioDtoResponse editaPerfilN2(UsuarioDtoRequest dto) {
-		UsuarioEntity usuarioHist = repository.getByUserName(dto.getUserName());
+	// 02/08/21 esse metodo altera alguns atributos do usuario da mesma equipe
+	// recebido como parametro
+	public UsuarioDtoResponse editaPerfilN2(String userName, UsuarioDtoRequest dto) {
 
-		if (dto.getNickName() != null) {
-			usuarioHist.setNickName(dto.getNickName());
+		UsuarioEntity histUserName = repository.getByUserName(userName);
+		if (histUserName.getEquipe().equals(dto.getEquipe())) {
+
+			UsuarioEntity histDto = repository.getByUserName(dto.getUserName());
+			if (dto.getNickName() != null) {
+				histDto.setNickName(dto.getNickName());
+			}
+
+			if (dto.getPapel() != null) {
+				PapelEntity papel = new PapelEntity();
+				papel = papelRepository.getByNome(dto.getPapel());
+				histDto.setPapel(papel);
+
+			}
+
+			if (dto.getEquipe() != null) {
+				EquipeEntity equipe = new EquipeEntity();
+				equipe = equipeRepository.getByNome(dto.getEquipe());
+				histDto.setEquipe(equipe);
+			}
+
+			if (dto.getStatus() != null) {
+				StatusEntity status = new StatusEntity();
+				status = statusRepository.getByNome(dto.getStatus());
+				histDto.setStatus(status);
+			}
+			return mapper.toDto(repository.save(histDto));
+
+		} else {
+			return null;
 		}
-
-		if (dto.getPapel() != null) {
-			PapelEntity papel = new PapelEntity();
-			papel = papelRepository.getByNome(dto.getPapel());
-			usuarioHist.setPapel(papel);
-
-		}
-
-		if (dto.getEquipe() != null) {
-			EquipeEntity equipe = new EquipeEntity();
-			equipe = equipeRepository.getByNome(dto.getEquipe());
-			usuarioHist.setEquipe(equipe);
-		}
-
-		if (dto.getStatus() != null) {
-			StatusEntity status = new StatusEntity();
-			status = statusRepository.getByNome(dto.getStatus());
-			usuarioHist.setStatus(status);
-		}
-
-		return mapper.toDto(repository.save(usuarioHist));
 
 	}
 
 	// 01/08/21 metodo criado para editar perfil do usuário recebe dto e uma imagem
 	// e devolve um usuario response
-	public UsuarioDtoResponse editaPerfilN1(UsuarioDtoRequest dto, MultipartFile file)
+	public UsuarioDtoResponse editaPerfilN1(String userName, UsuarioDtoRequest dto, MultipartFile file)
 			throws IOException, NotFoundException {
-		UsuarioEntity usuarioEditado = updateN1(dto);
 
-		Long usuarioId = usuarioEditado.getId();
+		if (userName.equals(dto.getUserName())) {
+			UsuarioEntity usuarioEditado = updateN1(userName, dto);
 
-		ImagemEntity imagem = imagemService.getImagem(usuarioId);
-		if (imagem != null) {
-			imagemService.deleteById(imagem.getId());
+			Long usuarioId = usuarioEditado.getId();
+
+			ImagemEntity imagem = imagemService.getImagem(usuarioId);
+			if (imagem != null) {
+				imagemService.deleteById(imagem.getId());
+			}
+
+			imagemService.create(usuarioEditado, file);
+
+			return getByUserName(usuarioEditado.getUserName());
+		} else {
+			return null;
 		}
-
-		imagemService.create(usuarioEditado, file);
-
-		return getByUserName(usuarioEditado.getUserName());
 
 	}
 
 	// 01/08/21 -- modifiquei o retorno do método para ser compatível com
 	// editaPerfil(), que recebe um entity
-	public UsuarioEntity updateN1(UsuarioDtoRequest usuario) {
-		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUserName());
+	public UsuarioEntity updateN1(String userName, UsuarioDtoRequest usuario) {
+		UsuarioEntity usuarioHist = repository.getByUserName(userName);
 
 		if (usuario.getNome() != null) {
 			usuarioHist.setNome(usuario.getNome());

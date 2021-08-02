@@ -68,10 +68,21 @@ public class UsuarioController {
 		 * usuario) { return service.update(usuario); }
 		 */
 	
-	@PutMapping("/editaPerfil")
-	public UsuarioDtoResponse editaPerfilN1 (@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, NotFoundException {
-		return service.editaPerfilN1(usuario, file);
+	@PutMapping("/editaPerfilN1/{userName}")
+	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, NotFoundException {
+		return service.editaPerfilN1(userName,usuario, file);
 	}
+	
+	@PutMapping("/editaPerfilN2/{userName}")
+	public UsuarioDtoResponse editaPerfilN2 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, NotFoundException {
+		return service.editaPerfilN2(userName,usuario);
+	}
+	
+	@PutMapping("/editaPerfilN3/{userName}")
+	public UsuarioDtoResponse editaPerfilN3 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, NotFoundException {
+		return service.editaPerfilN2(userName,usuario);
+	}
+	
 	
 	@DeleteMapping("/{userName}")
 	public String deleteByUserName(@PathVariable String userName) {
