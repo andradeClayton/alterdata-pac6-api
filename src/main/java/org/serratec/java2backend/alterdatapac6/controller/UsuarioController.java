@@ -46,39 +46,31 @@ public class UsuarioController {
 	 
 	 @GetMapping 
 	 //public List<UsuarioEntity> getAll(){ return service.getAll(); }
-	 public List<UsuarioDtoResponse> getAll() throws UsuarioNotFoundException{
+	 public List<UsuarioDtoResponse> getAll() throws NotFoundException{
 		 return service.getAllUser();
 	 }
 	 
 	
 	/*
-	 * @GetMapping public List<UsuarioDto> getAll(){ return service.getAll(); }
-	 */
-
-	/*
 	 * antes de incluir a url da imagem no getusername*/
 	  
 	@GetMapping("/{userName}") 
-	  public ResponseEntity<UsuarioDtoResponse> getByUserNome(@PathVariable String userName) throws UsuarioNotFoundException {
+	  public ResponseEntity<UsuarioDtoResponse> getByUserNome(@PathVariable String userName) throws NotFoundException {
 		
 			return ResponseEntity.ok(service.getByUserName(userName));
 		
 	  }
 	 
+		/*
+		 * // 01/08/21 troquei esse metodo pelo editaPerfil
+		 * 
+		 * @PutMapping public UsuarioDtoResponse update(@RequestBody UsuarioDtoRequest
+		 * usuario) { return service.update(usuario); }
+		 */
 	
-	/*
-	 * @GetMapping("/{userName}") public UsuarioDto getByUserNome(@PathVariable
-	 * String userName) { return service.getByUserNameUrl(userName); }
-	 */
-	
-	/* antes da inclusão de imagens
-	 * @PostMapping public UsuarioDto create(@RequestBody UsuarioDto usuario) throws
-	 * IOException { return service.create(usuario); }
-	 */
-	
-	@PutMapping
-	public UsuarioDtoResponse update(@RequestBody UsuarioDtoRequest usuario) {
-		return service.update(usuario);
+	@PutMapping("/editaPerfil")
+	public UsuarioDtoResponse editaPerfil (@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, NotFoundException {
+		return service.editaPerfil(usuario, file);
 	}
 	
 	@DeleteMapping("/{userName}")
@@ -96,15 +88,17 @@ public class UsuarioController {
 	
 
 	@PostMapping("/create")
-	public UsuarioDtoResponse create(@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException {
+	public UsuarioDtoResponse create(@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, NotFoundException {
 		return service.create(usuario,file);
 	}
 	
-	
-	/* 
-	 * @PostMapping("/create") public ClientDTO create(@RequestParam MultipartFile
-	 * file , @RequestPart ClientEntity entity) throws IOException { return
-	 * service.create(entity, file); }
+		
+	/*
+	 * @PostMapping("/criaPerfil") public String criaPerfil(@RequestBody
+	 * UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
+	 * return service.criaPerfil(usuario);
+	 * 
+	 * }
 	 */
 	
 	
@@ -117,18 +111,7 @@ public class UsuarioController {
 		return new ResponseEntity<byte[]>(imagem.getData(),header, HttpStatus.OK);
 	}
 	
-	
-	
-	/*
-	 * @GetMapping("/client/{clientId}/image") public ResponseEntity<byte[]>
-	 * getImage(@PathVariable Long clientId){ ImageEntity imagem =
-	 * imageService.getImagem(clientId); HttpHeaders header = new HttpHeaders();
-	 * header.add("content-length", String.valueOf(imagem.getData().length));
-	 * header.add("content-type", imagem.getMimeType()); return new
-	 * ResponseEntity<byte[]>(imagem.getData(),header, HttpStatus.OK); }
-	 */
-	
-	
+		
 	@PutMapping("/resetSenha/{userName}")
 	public String resetSenha(@PathVariable String userName) throws MessagingException {
 		return service.resetSenha(userName);

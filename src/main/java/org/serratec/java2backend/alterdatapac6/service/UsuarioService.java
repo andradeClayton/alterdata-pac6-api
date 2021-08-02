@@ -35,235 +35,261 @@ import javassist.NotFoundException;
 
 @Service
 public class UsuarioService {
-	
+
 	@Autowired
 	GeraSenha geraSenha;
-	
+
 	@Autowired
 	UsuarioRepository repository;
-	
+
 	@Autowired
 	UsuarioMapper mapper;
-	
+
 	@Autowired
 	PapelRepository papelRepository;
-	
+
 	@Autowired
 	StatusRepository statusRepository;
-	
+
 	@Autowired
 	EquipeRepository equipeRepository;
-	
+
 	@Autowired
 	ImagemService imagemService;
-	
+
 	@Autowired
 	BCryptPasswordEncoder bCrypt;
-	
+
 	@Autowired
 	MailConfig mailConfig;
-	
-	/*
-	  antes de incluir a url da imagem */
-	public List<UsuarioEntity> getAll() {
 
-		return repository.findAll();
-	}
-	 
-	 
-	 
 	
-	public List<UsuarioDtoResponse> getAllUser() throws UsuarioNotFoundException{
+
+	public List<UsuarioDtoResponse> getAllUser() throws NotFoundException {
 		List<UsuarioEntity> listEntity = repository.findAll();
 		List<UsuarioDtoResponse> listDto = new ArrayList();
-		
-		for(UsuarioEntity entity :listEntity) {
+
+		for (UsuarioEntity entity : listEntity) {
 			UsuarioDtoResponse dto = getByUserName(entity.getUserName());
 			listDto.add(dto);
 		}
-		
+
 		return listDto;
 	}
-	
 
-	public UsuarioDtoResponse getByUserName(String userName) throws UsuarioNotFoundException{
-	
+	public UsuarioDtoResponse getByUserName(String userName) throws NotFoundException{
+
 		UsuarioEntity entity = repository.getByUserName(userName);
-		
-		if(entity ==null) {
-			throw new UsuarioNotFoundException("Usuario não encontrado");
+
+		if (entity == null) {
+			throw new NotFoundException("Usuario não encontrado");
 		}
-		
+
 		UsuarioDtoResponse usuarioDto = mapper.toDto(entity);
 		String uri = adicionaUrlImagem(entity);
 		usuarioDto.setUrl(uri);
-				
+
 		return usuarioDto;
-		
-		
+
 	}
-	
+
 	public String adicionaUrlImagem(UsuarioEntity entity) {
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path(
-			    "/usuario/{usuarioId}/image") .buildAndExpand(entity.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario/{usuarioId}/image")
+				.buildAndExpand(entity.getId()).toUri();
 		return uri.toString();
 	}
-	
+
 	public UsuarioDtoResponse getByUserNameUrl(String userName) {
 		UsuarioEntity entity = repository.getByUserName(userName);
-		//UsuarioDtoResponse dto = addImageUrl(entity); //descomentei e vou subir para o heroku para testar se aparece a url
 		UsuarioDtoResponse dto = mapper.toDto(entity);
 		return dto;
 	}
 
+	// 01/08/21 metodo criado para editar perfil do usuário recebe dto e uma imagem e devolve um usuario response
+	public UsuarioDtoResponse editaPerfil (UsuarioDtoRequest dto, MultipartFile file) throws IOException, NotFoundException {
+		UsuarioEntity usuarioEditado = update(dto);
+		
+		Long usuarioId = usuarioEditado.getId();
+
+		ImagemEntity imagem = imagemService.getImagem(usuarioId);
+		imagemService.deleteById(imagem.getId());
+		imagemService.create(usuarioEditado, file);
+
+		return getByUserName(usuarioEditado.getUserName());
+		
+		
+	}
 	
 	
-	public UsuarioDtoResponse update(UsuarioDtoRequest usuario) {
+	// 01/08/21 --  modifiquei o retorno do método para ser compatível com editaPerfil(), que recebe um entity
+	public UsuarioEntity update(UsuarioDtoRequest usuario) {
 		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUserName());
 
 		if (usuario.getNome() != null) {
 			usuarioHist.setNome(usuario.getNome());
 		}
-		
+
 		if (usuario.getNickName() != null) {
 			usuarioHist.setNickName(usuario.getNickName());
 		}
-		
+
 		if (usuario.getPapel() != null) {
 			PapelEntity papel = new PapelEntity();
 			papel = papelRepository.getByNome(usuario.getPapel());
 			usuarioHist.setPapel(papel);
-			
+
 		}
-		
+
 		if (usuario.getUserName() != null) {
 			usuarioHist.setUserName(usuario.getUserName());
 		}
-		
+
 		if (usuario.getPassword() != null) {
 			usuarioHist.setPassword(usuario.getPassword());
 		}
-		
+
 		if (usuario.getEquipe() != null) {
 			EquipeEntity equipe = new EquipeEntity();
 			equipe = equipeRepository.getByNome(usuario.getEquipe());
 			usuarioHist.setEquipe(equipe);
 		}
-		
+
 		if (usuario.getStatus() != null) {
 			StatusEntity status = new StatusEntity();
 			status = statusRepository.getByNome(usuario.getStatus());
 			usuarioHist.setStatus(status);
 		}
-		
+
 		if (usuario.getEmail() != null) {
 			usuarioHist.setEmail(usuario.getEmail());
 		}
-		
-		if (usuario.getDtNascimento()!=null) {
+
+		if (usuario.getDtNascimento() != null) {
 			usuarioHist.setDtNascimento(usuario.getDtNascimento());
 		}
+
 		
-			
-		return mapper.toDto(repository.save(usuarioHist));
+		//return mapper.toDto(repository.save(usuarioHist));
+		return repository.save(usuarioHist);
 
 	}
-	
-	
-	
-	
+
 	public String deleteByUserName(String userName) {
-			
+
 		UsuarioEntity usuario = repository.getByUserName(userName);
-		if(usuario !=null) {
+		if (usuario != null) {
 			Long usuarioId = usuario.getId();
-			
+
 			ImagemEntity imagem = imagemService.getImagem(usuarioId);
 			imagemService.deleteById(imagem.getId());
 			repository.deleteById(usuarioId);
 			return userName;
-			
-		}else {
+
+		} else {
 			return "";
 		}
-	
-		
-		
-		
+
 	}
 
-
 	
-
-	public UsuarioEntity createUsuario(UsuarioDtoRequest usuario) {
+	public String criaPerfil (UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
+		String senhaNova;
 		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
-	
-		PapelEntity papel = papelRepository.getByNome(usuario.getPapel());
-		usuarioNovo.setPapel(papel);
 		
+		String userName,nome,padraoUser="alterdata.";
+		Integer posicaoEspaco;
 		
-		StatusEntity status = statusRepository.getByNome(usuario.getStatus());
-		usuarioNovo.setStatus(status); 
+		//cria o suarName a partir do nome
+		nome = usuario.getNome().toLowerCase();
+		posicaoEspaco = nome.indexOf(" ");
+		userName = padraoUser+nome.substring(0, posicaoEspaco);
+		usuarioNovo.setUserName(userName);
+		
+		//gera uma senha aleatória
+		senhaNova = geraSenha.geradorSenha(); // "ResetPac62021";
+		usuarioNovo.setPassword(bCrypt.encode(senhaNova));
+		
+		// capatura a imagem do usuario admim para servir como imagem inical do perfil
+		UsuarioEntity usuarioAdmin = repository.getByUserName("alterdata.admin");
+		ImagemEntity imagemAdmin = usuarioAdmin.getImagem();
+		usuarioNovo.setImagem(imagemAdmin);
+		
+		//usuarioNovo.setNickName(null);
 		
 		EquipeEntity equipe = equipeRepository.getByNome(usuario.getEquipe());
 		usuarioNovo.setEquipe(equipe);
+	
+		repository.save(usuarioNovo);
 		
-		usuarioNovo.setPassword(bCrypt.encode(usuarioNovo.getPassword()));
-		return repository.save(usuarioNovo);
-	
-	
+		return resetSenha(userName);
+		 
+		
+		
+		
 	}
 	
-	//cria o usuario e retorna um UsuarioDtoResponse
-	public UsuarioDtoResponse create(UsuarioDtoRequest dto, MultipartFile file) throws IOException, UsuarioNotFoundException {
-		
+	public UsuarioEntity createUsuario(UsuarioDtoRequest usuario) {
+		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
+
+		PapelEntity papel = papelRepository.getByNome(usuario.getPapel());
+		usuarioNovo.setPapel(papel);
+
+		StatusEntity status = statusRepository.getByNome(usuario.getStatus());
+		usuarioNovo.setStatus(status);
+
+		EquipeEntity equipe = equipeRepository.getByNome(usuario.getEquipe());
+		usuarioNovo.setEquipe(equipe);
+
+		usuarioNovo.setPassword(bCrypt.encode(usuarioNovo.getPassword()));
+		return repository.save(usuarioNovo);
+
+	}
+
+	
+	// cria o usuario e retorna um UsuarioDtoResponse
+	public UsuarioDtoResponse create(UsuarioDtoRequest dto, MultipartFile file)
+			throws IOException, NotFoundException {
+
 		UsuarioEntity entitySaved = createUsuario(dto);
 		imagemService.create(entitySaved, file);
-		
+
 		return getByUserName(entitySaved.getUserName());
 	}
 
 	
 	public String resetSenha(String userName) throws MessagingException {
-		
+
 		UsuarioEntity entity = repository.getByUserName(userName);
-		String email,senhaNova,usuario;
+		String email, senhaNova, usuario;
 		email = entity.getEmail();
-		usuario= entity.getUserName();
-		senhaNova =  geraSenha.geradorSenha(); //"ResetPac62021";
+		usuario = entity.getUserName();
+		senhaNova = geraSenha.geradorSenha(); // "ResetPac62021";
 		entity.setPassword(bCrypt.encode(senhaNova));
 		repository.save(entity);
-		
+
 		String subject = "Reset de senha";
-		
-		String body ="<tr><td>"+usuario+"</td><td></td>"+"<td>"+senhaNova+"</td><td></td><td></tr>";
-		
-		String msg =  "<table>" + "<thead style=color:blue>" + "<td><b>UserName</b></td><td></td>"
-				  + "<td><b>Password</b></td><td></td>"+"</thead>" +
-				  "<tbody>"+body +"</tbody>" + "</table>";
-		
+
+		String body = "<tr><td>" + usuario + "</td><td></td>" + "<td>" + senhaNova + "</td><td></td><td></tr>";
+
+		String msg = "<table>" + "<thead style=color:blue>" + "<td><b>UserName</b></td><td></td>"
+				+ "<td><b>Password</b></td><td></td>" + "</thead>" + "<tbody>" + body + "</tbody>" + "</table>";
+
 		return mailConfig.sendEmail(email, subject, msg);
-		
-		
+
 	}
-	
-	//=========================================Tere 29/07/21=======================================
-	 
+
+	// =========================================Tere 29/07/21=======================================
+
 	public UsuarioDtoResponse getByUserNameDto(String userName) {
 		UsuarioEntity entity = repository.getByUserName(userName);
-					
+
 		UsuarioDtoResponse usuarioDto = mapper.toDto(entity);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path(
-	    "/usuario/{usuarioId}/image") .buildAndExpand(entity.getId()).toUri();
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario/{usuarioId}/image")
+				.buildAndExpand(entity.getId()).toUri();
 		usuarioDto.setUrl(uri.toString());
-				
+
 		return usuarioDto;
 	}
-	
-	
+
 }
-
-
-
-

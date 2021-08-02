@@ -30,7 +30,7 @@ public class MailConfig {
 
 		javaMail.send(mail);
 
-		return "E-mail enviado com sucesso";
+		return "Verifique a caixa de entrada do e-mail cadastrado!";
 
 	}
 	
