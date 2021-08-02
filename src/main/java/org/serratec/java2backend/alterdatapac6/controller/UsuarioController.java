@@ -69,8 +69,8 @@ public class UsuarioController {
 		 */
 	
 	@PutMapping("/editaPerfil")
-	public UsuarioDtoResponse editaPerfil (@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, NotFoundException {
-		return service.editaPerfil(usuario, file);
+	public UsuarioDtoResponse editaPerfilN1 (@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, NotFoundException {
+		return service.editaPerfilN1(usuario, file);
 	}
 	
 	@DeleteMapping("/{userName}")

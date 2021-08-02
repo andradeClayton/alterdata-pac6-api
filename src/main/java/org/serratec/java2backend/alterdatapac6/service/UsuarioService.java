@@ -99,20 +99,41 @@ public class UsuarioService {
 		return uri.toString();
 	}
 
-	public UsuarioDtoResponse getByUserNameUrl(String userName) {
-		UsuarioEntity entity = repository.getByUserName(userName);
-		UsuarioDtoResponse dto = mapper.toDto(entity);
-		return dto;
-	}
+	/*
+	 * public UsuarioDtoResponse getByUserNameUrl(String userName) { UsuarioEntity
+	 * entity = repository.getByUserName(userName); UsuarioDtoResponse dto =
+	 * mapper.toDto(entity); return dto; }
+	 */
 
+	// 02/08/21 criação de metodo para controlar alteração de perfil
+	
+	public UsuarioDtoResponse verificaPerfil(String userName,UsuarioDtoRequest dto, MultipartFile file) throws IOException, NotFoundException {
+		if(userName.equals(dto.getUserName())) {
+			return editaPerfilN1(dto,file);
+		}
+		
+		UsuarioEntity usuarioHist = repository.getByUserName(userName);
+		if(usuarioHist.getEquipe().equals(dto.getEquipe())) {
+			
+		}
+		
+		
+		
+		
+	}
+	
+	
 	// 01/08/21 metodo criado para editar perfil do usuário recebe dto e uma imagem e devolve um usuario response
-	public UsuarioDtoResponse editaPerfil (UsuarioDtoRequest dto, MultipartFile file) throws IOException, NotFoundException {
-		UsuarioEntity usuarioEditado = update(dto);
+	public UsuarioDtoResponse editaPerfilN1 (UsuarioDtoRequest dto, MultipartFile file) throws IOException, NotFoundException {
+		UsuarioEntity usuarioEditado = updateN1(dto);
 		
 		Long usuarioId = usuarioEditado.getId();
 
 		ImagemEntity imagem = imagemService.getImagem(usuarioId);
-		imagemService.deleteById(imagem.getId());
+		if(imagem!=null) {
+			imagemService.deleteById(imagem.getId());
+		}
+			
 		imagemService.create(usuarioEditado, file);
 
 		return getByUserName(usuarioEditado.getUserName());
@@ -122,7 +143,7 @@ public class UsuarioService {
 	
 	
 	// 01/08/21 --  modifiquei o retorno do método para ser compatível com editaPerfil(), que recebe um entity
-	public UsuarioEntity update(UsuarioDtoRequest usuario) {
+	public UsuarioEntity updateN1(UsuarioDtoRequest usuario) {
 		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUserName());
 
 		if (usuario.getNome() != null) {
