@@ -8,11 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "STATUS")
+@Table(name = "STATUS", uniqueConstraints={@UniqueConstraint(columnNames={"nome"})})
 public class StatusEntity {
 	
 	@Id
@@ -21,13 +22,13 @@ public class StatusEntity {
 	
 	private String nome;
 	
-	private String descricao;
+//	private String descricao;
 	
 	@OneToMany(mappedBy = "status")
 	@JsonIgnore
 	private List<UsuarioEntity> usuarios;
 	
-	
+	private String emoji;
 
 	public StatusEntity() {
 		super();
@@ -36,16 +37,28 @@ public class StatusEntity {
 
 	
 	
-	public String getDescricao() {
-		return descricao;
+	
+	public String getEmoji() {
+		return emoji;
 	}
 
 
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+
+	public void setEmoji(String emogi) {
+		this.emoji = emogi;
 	}
 
+
+
+
+	/*
+	 * public String getDescricao() { return descricao; }
+	 * 
+	 * 
+	 * 
+	 * public void setDescricao(String descricao) { this.descricao = descricao; }
+	 */
 
 
 	public Long getId() {

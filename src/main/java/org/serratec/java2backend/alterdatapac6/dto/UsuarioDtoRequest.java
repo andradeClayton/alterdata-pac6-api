@@ -2,7 +2,9 @@ package org.serratec.java2backend.alterdatapac6.dto;
 
 import java.util.Date;
 
-public class UsuarioDto {
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+public class UsuarioDtoRequest {
 
 	private String nome;
 
@@ -10,8 +12,9 @@ public class UsuarioDto {
 	
 	private String papel;
 	
-	private String useName;
+	private String userName;
 	
+	//@JsonBackReference
 	private String password;
 	
 	private String equipe;
@@ -20,12 +23,26 @@ public class UsuarioDto {
 
 	private String email;
 	
+	//@JsonBackReference
 	private Date dtNascimento;
+	
+	private String url;
 
-	public UsuarioDto() {
+	public UsuarioDtoRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	
+	public String getUrl() {
+		return url;
+	}
+
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 
 	public String getNome() {
 		return nome;
@@ -51,12 +68,12 @@ public class UsuarioDto {
 		this.papel = papel;
 	}
 
-	public String getUseName() {
-		return useName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUseName(String useName) {
-		this.useName = useName;
+	public void setUseName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getPassword() {
