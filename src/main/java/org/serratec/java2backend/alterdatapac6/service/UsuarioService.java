@@ -107,20 +107,21 @@ public class UsuarioService {
 
 	// 02/08/21 criação de metodo para controlar alteração de perfil
 	
-	public UsuarioDtoResponse verificaPerfil(String userName,UsuarioDtoRequest dto, MultipartFile file) throws IOException, NotFoundException {
-		if(userName.equals(dto.getUserName())) {
-			return editaPerfilN1(dto,file);
-		}
-		
-		UsuarioEntity usuarioHist = repository.getByUserName(userName);
-		if(usuarioHist.getEquipe().equals(dto.getEquipe())) {
-			
-		}
-		
-		
-		
-		
-	}
+	/*
+	 * public UsuarioDtoResponse verificaPerfil(String userName,UsuarioDtoRequest
+	 * dto, MultipartFile file) throws IOException, NotFoundException {
+	 * if(userName.equals(dto.getUserName())) { return editaPerfilN1(dto,file); }
+	 * 
+	 * UsuarioEntity usuarioHist = repository.getByUserName(userName);
+	 * if(usuarioHist.getEquipe().equals(dto.getEquipe())) {
+	 * 
+	 * }
+	 * 
+	 * 
+	 * 
+	 * 
+	 * }
+	 */
 	
 	
 	// 01/08/21 metodo criado para editar perfil do usuário recebe dto e uma imagem e devolve um usuario response
