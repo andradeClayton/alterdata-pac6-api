@@ -258,27 +258,25 @@ public class UsuarioService {
 
 	}
 
-	public String criaPerfil(UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
-		String senhaNova;
+	public String criaPerfil(String userName,UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
+		
 		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
 
-		String userName, nome, padraoUser = "alterdata.";
+		String senhaNova, NewUserName, nome, padraoUser = "alterdata.";
 		Integer posicaoEspaco;
 		
 		// gera uma senha aleatória
 		senhaNova = geraSenha.geradorSenha(); // "ResetPac62021";
 		usuarioNovo.setPassword(bCrypt.encode(senhaNova));
 
-		// cria o suarName a partir do nome
-				nome = usuario.getNome().toLowerCase();
-				posicaoEspaco = nome.indexOf(" ");
-				userName = padraoUser + nome.substring(0, posicaoEspaco)+senhaNova.substring(0, 4);
-				usuarioNovo.setUserName(userName);
-
-		
-		
+		// cria o userName a partir do nome
+		nome = usuario.getNome().toLowerCase();
+		posicaoEspaco = nome.indexOf(" ");
+		NewUserName = padraoUser + nome.substring(0, posicaoEspaco)+senhaNova.substring(0, 4);
+		usuarioNovo.setUserName(NewUserName);
 		
 		// capatura a imagem do usuario admim para servir como imagem inical do perfil
+		
 		
 		/*
 		 * UsuarioEntity usuarioAdmin = repository.getByUserName("alterdata.admin");
@@ -286,13 +284,16 @@ public class UsuarioService {
 		 * usuarioNovo.setImagem(imagemAdmin);
 		 */
 		// usuarioNovo.setNickName(null);
-
-		EquipeEntity equipe = equipeRepository.getByNome(usuario.getEquipe());
-		usuarioNovo.setEquipe(equipe);
+		// 03/08/2021 -- preenche alguns parâmetros do usuário novo
+		UsuarioEntity entity = repository.getByUserName(userName);
+		//EquipeEntity equipe = equipeRepository.getByNome(userName);
+		usuarioNovo.setEquipe(entity.getEquipe());
+		usuarioNovo.setPapel(entity.getPapel());
+		usuarioNovo.setStatus(entity.getStatus());
 
 		repository.save(usuarioNovo);
 
-		return resetSenha(userName);
+		return resetSenha(NewUserName);
 
 	}
 

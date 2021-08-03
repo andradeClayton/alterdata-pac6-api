@@ -104,13 +104,13 @@ public class UsuarioController {
 	}
 	
 		
-	/*
-	 * @PostMapping("/criaPerfil") public String criaPerfil(@RequestBody
-	 * UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
-	 * return service.criaPerfil(usuario);
-	 * 
-	 * }
-	 */
+	
+	  @PostMapping("/criaPerfil/{userName}") 
+	  public String criaPerfil(@PathVariable String userName, @RequestBody UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
+	  return service.criaPerfil(userName,usuario);
+	  
+	  }
+	 
 	
 	
 	@GetMapping("{usuarioId}/image")
