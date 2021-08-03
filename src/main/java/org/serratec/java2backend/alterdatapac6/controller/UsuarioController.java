@@ -80,7 +80,7 @@ public class UsuarioController {
 	
 	@PutMapping("/editaPerfilN3/{userName}")
 	public UsuarioDtoResponse editaPerfilN3 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, NotFoundException {
-		return service.editaPerfilN2(userName,usuario);
+		return service.editaPerfilN3(userName,usuario);
 	}
 	
 	

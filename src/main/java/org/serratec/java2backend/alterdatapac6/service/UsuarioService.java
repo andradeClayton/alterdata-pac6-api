@@ -140,36 +140,31 @@ public class UsuarioService {
 	public UsuarioDtoResponse editaPerfilN2(String userName, UsuarioDtoRequest dto) {
 
 		UsuarioEntity histUserName = repository.getByUserName(userName);
-		if (histUserName.getEquipe().equals(dto.getEquipe())) {
 
-			UsuarioEntity histDto = repository.getByUserName(dto.getUserName());
-			if (dto.getNickName() != null) {
-				histDto.setNickName(dto.getNickName());
-			}
-
-			if (dto.getPapel() != null) {
-				PapelEntity papel = new PapelEntity();
-				papel = papelRepository.getByNome(dto.getPapel());
-				histDto.setPapel(papel);
-
-			}
-
-			if (dto.getEquipe() != null) {
-				EquipeEntity equipe = new EquipeEntity();
-				equipe = equipeRepository.getByNome(dto.getEquipe());
-				histDto.setEquipe(equipe);
-			}
-
-			if (dto.getStatus() != null) {
-				StatusEntity status = new StatusEntity();
-				status = statusRepository.getByNome(dto.getStatus());
-				histDto.setStatus(status);
-			}
-			return mapper.toDto(repository.save(histDto));
-
-		} else {
-			return null;
+		UsuarioEntity histDto = repository.getByUserName(dto.getUserName());
+		if (dto.getNickName() != null) {
+			histDto.setNickName(dto.getNickName());
 		}
+
+		if (dto.getPapel() != null) {
+			PapelEntity papel = new PapelEntity();
+			papel = papelRepository.getByNome(dto.getPapel());
+			histDto.setPapel(papel);
+
+		}
+
+		if (dto.getEquipe() != null) {
+			EquipeEntity equipe = new EquipeEntity();
+			equipe = equipeRepository.getByNome(dto.getEquipe());
+			histDto.setEquipe(equipe);
+		}
+
+		if (dto.getStatus() != null) {
+			StatusEntity status = new StatusEntity();
+			status = statusRepository.getByNome(dto.getStatus());
+			histDto.setStatus(status);
+		}
+		return mapper.toDto(repository.save(histDto));
 
 	}
 
@@ -178,22 +173,18 @@ public class UsuarioService {
 	public UsuarioDtoResponse editaPerfilN1(String userName, UsuarioDtoRequest dto, MultipartFile file)
 			throws IOException, NotFoundException {
 
-		if (userName.equals(dto.getUserName())) {
-			UsuarioEntity usuarioEditado = updateN1(userName, dto);
+		UsuarioEntity usuarioEditado = updateN1(userName, dto);
 
-			Long usuarioId = usuarioEditado.getId();
+		Long usuarioId = usuarioEditado.getId();
 
-			ImagemEntity imagem = imagemService.getImagem(usuarioId);
-			if (imagem != null) {
-				imagemService.deleteById(imagem.getId());
-			}
-
-			imagemService.create(usuarioEditado, file);
-
-			return getByUserName(usuarioEditado.getUserName());
-		} else {
-			return null;
+		ImagemEntity imagem = imagemService.getImagem(usuarioId);
+		if (imagem != null) {
+			imagemService.deleteById(imagem.getId());
 		}
+
+		imagemService.create(usuarioEditado, file);
+
+		return getByUserName(usuarioEditado.getUserName());
 
 	}
 
@@ -222,7 +213,7 @@ public class UsuarioService {
 		}
 
 		if (usuario.getPassword() != null) {
-			usuarioHist.setPassword(usuario.getPassword());
+			usuarioHist.setPassword(bCrypt.encode(usuario.getPassword()));
 		}
 
 		if (usuario.getEquipe() != null) {
