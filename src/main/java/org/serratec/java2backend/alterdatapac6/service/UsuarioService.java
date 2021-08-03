@@ -264,22 +264,27 @@ public class UsuarioService {
 
 		String userName, nome, padraoUser = "alterdata.";
 		Integer posicaoEspaco;
-
-		// cria o suarName a partir do nome
-		nome = usuario.getNome().toLowerCase();
-		posicaoEspaco = nome.indexOf(" ");
-		userName = padraoUser + nome.substring(0, posicaoEspaco);
-		usuarioNovo.setUserName(userName);
-
+		
 		// gera uma senha aleatória
 		senhaNova = geraSenha.geradorSenha(); // "ResetPac62021";
 		usuarioNovo.setPassword(bCrypt.encode(senhaNova));
 
-		// capatura a imagem do usuario admim para servir como imagem inical do perfil
-		UsuarioEntity usuarioAdmin = repository.getByUserName("alterdata.admin");
-		ImagemEntity imagemAdmin = usuarioAdmin.getImagem();
-		usuarioNovo.setImagem(imagemAdmin);
+		// cria o suarName a partir do nome
+				nome = usuario.getNome().toLowerCase();
+				posicaoEspaco = nome.indexOf(" ");
+				userName = padraoUser + nome.substring(0, posicaoEspaco)+senhaNova.substring(0, 4);
+				usuarioNovo.setUserName(userName);
 
+		
+		
+		
+		// capatura a imagem do usuario admim para servir como imagem inical do perfil
+		
+		/*
+		 * UsuarioEntity usuarioAdmin = repository.getByUserName("alterdata.admin");
+		 * ImagemEntity imagemAdmin = usuarioAdmin.getImagem();
+		 * usuarioNovo.setImagem(imagemAdmin);
+		 */
 		// usuarioNovo.setNickName(null);
 
 		EquipeEntity equipe = equipeRepository.getByNome(usuario.getEquipe());
