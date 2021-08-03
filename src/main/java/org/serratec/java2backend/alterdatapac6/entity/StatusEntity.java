@@ -22,7 +22,7 @@ public class StatusEntity {
 	
 	private String nome;
 	
-	//private String descricao;
+	private String descricao;
 	
 	@OneToMany(mappedBy = "status")
 	@JsonIgnore
@@ -52,13 +52,13 @@ public class StatusEntity {
 
 
 
-	/*
-	 * public String getDescricao() { return descricao; }
-	 * 
-	 * 
-	 * 
-	 * public void setDescricao(String descricao) { this.descricao = descricao; }
-	 */
+	
+	  public String getDescricao() { return descricao; }
+	  
+	  
+	  
+	  public void setDescricao(String descricao) { this.descricao = descricao; }
+	 
 
 
 

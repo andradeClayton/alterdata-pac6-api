@@ -4,7 +4,7 @@ public class StatusDto {
 
 	private String nome;
 
-	//private String descricao;
+	private String descricao;
 	
 	private String emoji;
 
@@ -32,10 +32,10 @@ public class StatusDto {
 		this.nome = nome;
 	}
 
-	/*
-	 * public String getDescricao() { return descricao; }
-	 * 
-	 * public void setDescricao(String descricao) { this.descricao = descricao; }
-	 */
+	
+	  public String getDescricao() { return descricao; }
+	  
+	  public void setDescricao(String descricao) { this.descricao = descricao; }
+	 
 	
 }
