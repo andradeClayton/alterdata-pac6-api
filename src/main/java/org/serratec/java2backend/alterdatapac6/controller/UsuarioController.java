@@ -9,6 +9,7 @@ import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoRequest;
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoResponse;
 import org.serratec.java2backend.alterdatapac6.entity.ImagemEntity;
 import org.serratec.java2backend.alterdatapac6.entity.UsuarioEntity;
+import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioDuplicadoException;
 import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioNotFoundException;
 import org.serratec.java2backend.alterdatapac6.service.ImagemService;
 import org.serratec.java2backend.alterdatapac6.service.UsuarioService;
@@ -46,7 +47,7 @@ public class UsuarioController {
 	 
 	 @GetMapping 
 	 //public List<UsuarioEntity> getAll(){ return service.getAll(); }
-	 public List<UsuarioDtoResponse> getAll() throws NotFoundException{
+	 public List<UsuarioDtoResponse> getAll() throws UsuarioNotFoundException{
 		 return service.getAllUser();
 	 }
 	 
@@ -55,7 +56,7 @@ public class UsuarioController {
 	 * antes de incluir a url da imagem no getusername*/
 	  
 	@GetMapping("/{userName}") 
-	  public ResponseEntity<UsuarioDtoResponse> getByUserNome(@PathVariable String userName) throws NotFoundException {
+	  public ResponseEntity<UsuarioDtoResponse> getByUserNome(@PathVariable String userName) throws UsuarioNotFoundException {
 		
 			return ResponseEntity.ok(service.getByUserName(userName));
 		
@@ -69,23 +70,23 @@ public class UsuarioController {
 		 */
 	
 	@PutMapping("/editaPerfilN1/{userName}")
-	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, NotFoundException {
+	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
 		return service.editaPerfilN1(userName,usuario, file);
 	}
 	
 	@PutMapping("/editaPerfilN2/{userName}")
-	public UsuarioDtoResponse editaPerfilN2 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, NotFoundException {
+	public UsuarioDtoResponse editaPerfilN2 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException {
 		return service.editaPerfilN2(userName,usuario);
 	}
 	
 	@PutMapping("/editaPerfilN3/{userName}")
-	public UsuarioDtoResponse editaPerfilN3 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, NotFoundException {
+	public UsuarioDtoResponse editaPerfilN3 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException {
 		return service.editaPerfilN3(userName,usuario);
 	}
 	
 	
 	@DeleteMapping("/{userName}")
-	public String deleteByUserName(@PathVariable String userName) {
+	public String deleteByUserName(@PathVariable String userName) throws UsuarioNotFoundException {
 		String response = service.deleteByUserName(userName);
 		
 		if(response.equals(userName)) {
@@ -98,15 +99,17 @@ public class UsuarioController {
 
 	
 
-	@PostMapping("/create")
-	public UsuarioDtoResponse create(@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, NotFoundException {
-		return service.create(usuario,file);
-	}
+	/*
+	 * @PostMapping("/create") public UsuarioDtoResponse create(@RequestParam
+	 * MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws
+	 * IOException, NotFoundException, UsuarioNotFoundException { return
+	 * service.create(usuario,file); }
+	 */
 	
 		
 	
 	  @PostMapping("/criaPerfil/{userName}") 
-	  public String criaPerfil(@PathVariable String userName, @RequestBody UsuarioDtoRequest usuario) throws NotFoundException, MessagingException {
+	  public String criaPerfil(@PathVariable String userName, @RequestBody UsuarioDtoRequest usuario) throws MessagingException, UsuarioNotFoundException {
 	  return service.criaPerfil(userName,usuario);
 	  
 	  }
@@ -124,7 +127,7 @@ public class UsuarioController {
 	
 		
 	@PutMapping("/resetSenha/{userName}")
-	public String resetSenha(@PathVariable String userName) throws MessagingException {
+	public String resetSenha(@PathVariable String userName) throws MessagingException, UsuarioNotFoundException {
 		return service.resetSenha(userName);
 	}
 	
