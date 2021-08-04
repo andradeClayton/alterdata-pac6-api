@@ -69,6 +69,11 @@ public class UsuarioController {
 	//@PutMapping(value="/editaPerfilN1/{userName}", consumes = {MediaType.MULTIPART_FORM_DATA})
 	@PutMapping("/editaPerfilN1/{userName}")
 	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestPart MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
+		//teste de aruivo vazio
+		
+		  if(file==null) { throw new UsuarioNotFoundException("arquivo vazio"); }
+		 
+		
 		return service.editaPerfilN1(userName,usuario, file);
 	}
 	
