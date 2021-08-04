@@ -11,6 +11,7 @@ import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoResponse;
 import org.serratec.java2backend.alterdatapac6.entity.ImagemEntity;
 import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioDuplicadoException;
 import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioNotFoundException;
+import org.serratec.java2backend.alterdatapac6.mapper.UsuarioMapper;
 import org.serratec.java2backend.alterdatapac6.service.ImagemService;
 import org.serratec.java2backend.alterdatapac6.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class UsuarioController {
 	@Autowired
 	ImagemService imagemService;
 	
+	@Autowired
+	UsuarioMapper mapper;
 
 	/*
 	  antes de colocar a url da imagem no dto*/
@@ -65,6 +68,14 @@ public class UsuarioController {
 		 * @PutMapping public UsuarioDtoResponse update(@RequestBody UsuarioDtoRequest
 		 * usuario) { return service.update(usuario); }
 		 */
+	
+	@PutMapping("/editaPerfilN1b/{userName}")
+	public UsuarioDtoResponse editaPerfilN1b (@PathVariable String userName, @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
+		//teste de aruivo vazio
+		
+		return mapper.toDto(service.updateN1(userName,usuario));
+	}
+	
 	
 	//@PutMapping(value="/editaPerfilN1/{userName}", consumes = {MediaType.MULTIPART_FORM_DATA})
 	@PutMapping("/editaPerfilN1/{userName}")
