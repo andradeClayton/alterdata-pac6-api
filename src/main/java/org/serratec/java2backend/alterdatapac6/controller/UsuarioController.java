@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,7 +71,7 @@ public class UsuarioController {
 		 */
 	
 	@PutMapping("/editaPerfilN1b/{userName}")
-	public UsuarioDtoResponse editaPerfilN1b (@PathVariable String userName, @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
+	public UsuarioDtoResponse editaPerfilN1b (@PathVariable String userName, @RequestParam UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
 		//teste de aruivo vazio
 		
 		return mapper.toDto(service.updateN1(userName,usuario));
