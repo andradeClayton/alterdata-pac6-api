@@ -66,8 +66,8 @@ public class UsuarioController {
 		 * usuario) { return service.update(usuario); }
 		 */
 	
-	@PutMapping(value="/editaPerfilN1/{userName}", consumes = {MediaType.MULTIPART_FORM_DATA})
-	//@PutMapping("/editaPerfilN1/{userName}")
+	//@PutMapping(value="/editaPerfilN1/{userName}", consumes = {MediaType.MULTIPART_FORM_DATA})
+	@PutMapping("/editaPerfilN1/{userName}")
 	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestPart MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
 		return service.editaPerfilN1(userName,usuario, file);
 	}
