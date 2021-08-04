@@ -70,7 +70,7 @@ public class UsuarioController {
 		 */
 	
 	@PutMapping("/editaPerfilN1/{userName}")
-	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
+	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestParam MultipartFile file , @RequestParam UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
 		return service.editaPerfilN1(userName,usuario, file);
 	}
 	
