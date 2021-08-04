@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.ws.rs.core.MediaType;
 
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoRequest;
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoResponse;
 import org.serratec.java2backend.alterdatapac6.entity.ImagemEntity;
-import org.serratec.java2backend.alterdatapac6.entity.UsuarioEntity;
 import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioDuplicadoException;
 import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioNotFoundException;
 import org.serratec.java2backend.alterdatapac6.service.ImagemService;
@@ -24,12 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import javassist.NotFoundException;
 
 @RestController
 @RequestMapping("/usuario")
@@ -69,10 +66,12 @@ public class UsuarioController {
 		 * usuario) { return service.update(usuario); }
 		 */
 	
-	@PutMapping("/editaPerfilN1/{userName}")
+	@PutMapping(value="/editaPerfilN1/{userName}", consumes = {MediaType.MULTIPART_FORM_DATA})
+	//@PutMapping("/editaPerfilN1/{userName}")
 	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestPart MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
 		return service.editaPerfilN1(userName,usuario, file);
 	}
+	
 	
 	@PutMapping("/editaPerfilN2/{userName}")
 	public UsuarioDtoResponse editaPerfilN2 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException {

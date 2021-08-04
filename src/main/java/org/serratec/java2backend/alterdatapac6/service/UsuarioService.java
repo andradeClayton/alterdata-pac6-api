@@ -151,7 +151,7 @@ public class UsuarioService {
 		UsuarioEntity histUserName = repository.getByUserName(userName);
 
 		UsuarioEntity histDto = repository.getByUserName(dto.getUserName());
-		
+
 		if (histUserName == null) {
 			throw new UsuarioNotFoundException("Usuario " + userName + " não encontrado");
 		}
@@ -159,8 +159,7 @@ public class UsuarioService {
 		if (histDto == null) {
 			throw new UsuarioNotFoundException("Usuario " + dto.getUserName() + " não encontrado");
 		}
-		
-		
+
 		if (dto.getNickName() != null) {
 			histDto.setNickName(dto.getNickName());
 		}
@@ -217,9 +216,15 @@ public class UsuarioService {
 		}
 
 		UsuarioEntity usuarioBd = repository.getByUserName(usuario.getUserName());
-		if(usuarioBd!=null) {
-			throw new UsuarioDuplicadoException("O usuário "+usuario.getUserName()+" já existe. Escolha outro username");
+			
+		if(!userName.equals(usuario.getUserName())) {
+			
+			if(usuarioBd!=null) {
+					throw new UsuarioDuplicadoException("O usuário "+usuario.getUserName()+" já existe. Escolha outro username");
+			}
+			
 		}
+				
 		
 		
 		if (usuario.getNome() != null) {
@@ -276,8 +281,7 @@ public class UsuarioService {
 		if (usuario == null) {
 			throw new UsuarioNotFoundException("Usuario " + userName + " não encontrado");
 		}
-		
-		
+
 		if (usuario != null) {
 			Long usuarioId = usuario.getId();
 
@@ -292,15 +296,16 @@ public class UsuarioService {
 
 	}
 
-	public String criaPerfil(String userName, UsuarioDtoRequest usuario) throws MessagingException, UsuarioNotFoundException {
+	public String criaPerfil(String userName, UsuarioDtoRequest usuario)
+			throws MessagingException, UsuarioNotFoundException {
 
 		UsuarioEntity usuarioNovo = mapper.toEntity(usuario);
-		
+
 		UsuarioEntity entity = repository.getByUserName(userName);
 		if (entity == null) {
 			throw new UsuarioNotFoundException("Usuario " + userName + " não encontrado");
 		}
-		
+
 		UsuarioEntity usuarioHist = repository.getByUserName(usuario.getUserName());
 
 		String senhaNova, NewUserName, nome, padraoUser = "alterdata.";
@@ -317,8 +322,7 @@ public class UsuarioService {
 		usuarioNovo.setUserName(NewUserName);
 
 		// 03/08/2021 -- preenche alguns parâmetros do usuário novo
-		
-		
+
 		usuarioNovo.setEquipe(entity.getEquipe());
 		usuarioNovo.setPapel(entity.getPapel());
 		usuarioNovo.setStatus(entity.getStatus());
@@ -363,7 +367,7 @@ public class UsuarioService {
 		if (entity == null) {
 			throw new UsuarioNotFoundException("Usuario " + userName + " não encontrado");
 		}
-		
+
 		String email, senhaNova, usuario;
 		email = entity.getEmail();
 		usuario = entity.getUserName();
