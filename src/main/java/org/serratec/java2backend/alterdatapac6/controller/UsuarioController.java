@@ -71,7 +71,7 @@ public class UsuarioController {
 		 */
 	
 	@PutMapping("/editaPerfilN1b/{userName}")
-	public UsuarioDtoResponse editaPerfilN1b (@PathVariable String userName, @RequestParam UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
+	public UsuarioDtoResponse editaPerfilN1b (@PathVariable String userName, @RequestBody UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
 		//teste de aruivo vazio
 		
 		return mapper.toDto(service.updateN1(userName,usuario));
