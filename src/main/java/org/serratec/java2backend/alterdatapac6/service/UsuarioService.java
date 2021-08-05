@@ -398,9 +398,9 @@ public class UsuarioService {
 		 */
 		
 		String msg= "<div style=text-align:center borde: solid 2px>"+
-				"<h2 style=background-color:#03569C color:#fff> Olá " + entity.getNome()+ ", tudo bem? </h2>" + 
+				"<h2 style= color:#fff background-color:#03569C> Olá " + entity.getNome()+ ", tudo bem? </h2>" + 
 				"<p>Você enviou uma solitação para redefinir a sua senha, segue abaixo os novos dados de acesso.</p>" +
-                "<p style=color:#03569C><b>Usuário: </b>" + userName + "</p>" +
+                "<p><b>Usuário: </b>" + userName + "</p>" +
                 "<p style=color:#03569C><b>Nova Senha: </b>" + senhaNova + "</p>" +
                 "<p>Lembre-se você também pode alteração sua senha nas configurações do seu perfil. </p>"+
                 "<img style= height:80px width:120px src='https://images-ext-2.discordapp.net/external/hxjmuC-LoXcogsUgbRNLdryurFZrZStJCogsbKR1M6o/https/www.canva.com/design/DAEmMD7CT7M/screen?width=400&height=175'></img>"+
