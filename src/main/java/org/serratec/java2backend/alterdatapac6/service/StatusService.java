@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.serratec.java2backend.alterdatapac6.dto.StatusDto;
 import org.serratec.java2backend.alterdatapac6.entity.StatusEntity;
+import org.serratec.java2backend.alterdatapac6.exceptions.StatusDuplicadoException;
+import org.serratec.java2backend.alterdatapac6.exceptions.StatusNotFoundException;
 import org.serratec.java2backend.alterdatapac6.mapper.StatusMapper;
 import org.serratec.java2backend.alterdatapac6.repository.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,21 @@ public class StatusService {
 		return repository.findAll();
 	}
 
-	public StatusEntity getByNome(String nome) {
+	public StatusEntity getByNome(String nome) throws StatusNotFoundException {
+		StatusEntity entity = repository.getByNome(nome);
+		if(entity==null) {
+			throw new StatusNotFoundException("Usuario "+nome+" não encontrado!");
+		}
+		
 		return repository.getByNome(nome);
 	}
 
-	public StatusDto create(StatusDto status) {
+	public StatusDto create(StatusDto status) throws StatusDuplicadoException {
+		StatusEntity entity = repository.getByNome(status.getNome());
+		if(entity!=null) {
+			throw new StatusDuplicadoException("O status "+status.getNome()+" já existe! escolha outro nome.");
+		}
+		
 		StatusEntity statusNovo = mapper.toEntity(status);
 		return mapper.toDto(repository.save(statusNovo));
 	}
@@ -64,7 +76,7 @@ public class StatusService {
 	 * 
 	 * }
 	 */
-	public void deleteByNome(String nome) {
+	public void deleteByNome(String nome) throws StatusNotFoundException {
 		StatusEntity status = getByNome(nome);
 		Long statusID = status.getId();
 

@@ -286,7 +286,10 @@ public class UsuarioService {
 			Long usuarioId = usuario.getId();
 
 			ImagemEntity imagem = imagemService.getImagem(usuarioId);
-			imagemService.deleteById(imagem.getId());
+			if(imagem!=null) {
+				imagemService.deleteById(imagem.getId());
+			}
+							
 			repository.deleteById(usuarioId);
 			return userName;
 
@@ -377,15 +380,40 @@ public class UsuarioService {
 
 		String subject = entity.getNome() + " - AlterDevs message";
 
-		String body = "<tr><td>" + usuario + "</td><td></td>" + "<td>" + senhaNova + "</td><td></td><td></tr>";
-
-		String msg = "<table>" + "<thead style=color:blue>" + "<td><b>UserName</b></td><td></td>"
-				+ "<td><b>Password</b></td><td></td>" + "</thead>" + "<tbody>" + body + "</tbody>" + "</table>";
-
+		/*
+		 * String body = "<tr><td>" + usuario + "</td><td></td>" + "<td>" + senhaNova +
+		 * "</td><td></td><td></tr>";
+		 * 
+		 * String msg = "<table>" + "<thead style=color:blue>" +
+		 * "<td><b>UserName</b></td><td></td>" + "<td><b>Password</b></td><td></td>" +
+		 * "</thead>" + "<tbody>" + body + "</tbody>" + "</table>";
+		 */
+		
+		/*
+		 * String msg= "<h1> Olá " + usuario+ ",  tudo bem? </h1>"
+		 * +"<p>Você enviou uma solitação para redefinir a sua senha. Abaixo segue a sua nova senha:</p>"
+		 * + "<p style=color:blue>Nova senha: " + senhaNova + "</p>" +
+		 * "<p>Faça o login com a nova senha. Lembre-se que é possível fazer a alteração desta senha nas configurações do seu perfil. </p>"
+		 * ;
+		 */
+		
+		String msg= "<div style=text-align:center borde: solid 2px>"+
+				"<h2 style=background-color:#03569C color:#fff> Olá " + entity.getNome()+ ", tudo bem? </h2>" + 
+				"<p>Você enviou uma solitação para redefinir a sua senha, segue abaixo os novos dados de acesso.</p>" +
+                "<p style=color:#03569C><b>Usuário: </b>" + userName + "</p>" +
+                "<p style=color:#03569C><b>Nova Senha: </b>" + senhaNova + "</p>" +
+                "<p>Lembre-se você também pode alteração sua senha nas configurações do seu perfil. </p>"+
+                "<img style= height:80px width:120px src='https://images-ext-2.discordapp.net/external/hxjmuC-LoXcogsUgbRNLdryurFZrZStJCogsbKR1M6o/https/www.canva.com/design/DAEmMD7CT7M/screen?width=400&height=175'></img>"+
+                "</div>";
+		
 		return mailConfig.sendEmail(email, subject, msg);
 
 	}
 
+	
+	
+	
+	
 	// =========================================Tere
 	// 29/07/21=======================================
 

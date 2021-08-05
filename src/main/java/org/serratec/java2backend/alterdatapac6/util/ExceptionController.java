@@ -4,6 +4,8 @@ import org.serratec.java2backend.alterdatapac6.exceptions.EquipeDuplicadaExcepti
 import org.serratec.java2backend.alterdatapac6.exceptions.EquipeNotFoundException;
 import org.serratec.java2backend.alterdatapac6.exceptions.PapelDuplicadoException;
 import org.serratec.java2backend.alterdatapac6.exceptions.PapelNotFoundException;
+import org.serratec.java2backend.alterdatapac6.exceptions.StatusDuplicadoException;
+import org.serratec.java2backend.alterdatapac6.exceptions.StatusNotFoundException;
 import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioDuplicadoException;
 import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -58,6 +60,22 @@ public class ExceptionController {
 				.header("x-error-msg", exception.getMessage())
 				.build();
 	}
+	
 
+	@ExceptionHandler(StatusNotFoundException.class)
+	public ResponseEntity<String> tratarUsuarioNotFoundException(StatusNotFoundException exception){
+		return ResponseEntity.notFound()
+				.header("x-error-msg", exception.getMessage())
+				.build();
+	}
+
+	@ExceptionHandler(StatusDuplicadoException.class)
+	public ResponseEntity<String> tratarSaldoInsuficienteException(StatusDuplicadoException exception) {
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+				.header("x-error-msg", exception.getMessage())
+				.build();
+	}
+	
+	
 }
 
