@@ -45,13 +45,19 @@ public class StatusEntity {
 
 
 
+<<<<<<< HEAD
 	public void setEmoji(String emogi) {
 		this.emoji = emogi;
+=======
+	public void setEmoji(String emoji) {
+		this.emoji = emoji;
+>>>>>>> master
 	}
 
 
 
 
+<<<<<<< HEAD
 	/*
 	 * public String getDescricao() { return descricao; }
 	 * 
@@ -59,6 +65,16 @@ public class StatusEntity {
 	 * 
 	 * public void setDescricao(String descricao) { this.descricao = descricao; }
 	 */
+=======
+	
+	  public String getDescricao() { return descricao; }
+	  
+	  
+	  
+	  public void setDescricao(String descricao) { this.descricao = descricao; }
+	 
+
+>>>>>>> master
 
 
 	public Long getId() {

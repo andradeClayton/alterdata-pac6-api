@@ -11,7 +11,7 @@ public class PapelMapper {
 		PapelEntity entity = new PapelEntity();
 		entity.setNome(dto.getNome());
 		entity.setDescricao(dto.getDescricao());
-		
+		entity.setCor(dto.getCor());		
 		return entity;
 	}
 	
@@ -19,6 +19,7 @@ public class PapelMapper {
 		PapelDto dto = new PapelDto();
 		dto.setNome(entity.getNome());
 		dto.setDescricao(entity.getDescricao());
+		dto.setCor(entity.getCor());
 	
 		return dto;
 	}

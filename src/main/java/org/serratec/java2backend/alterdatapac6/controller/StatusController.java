@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.serratec.java2backend.alterdatapac6.dto.StatusDto;
 import org.serratec.java2backend.alterdatapac6.entity.StatusEntity;
+import org.serratec.java2backend.alterdatapac6.exceptions.StatusDuplicadoException;
+import org.serratec.java2backend.alterdatapac6.exceptions.StatusNotFoundException;
 import org.serratec.java2backend.alterdatapac6.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,23 +32,28 @@ public class StatusController {
 	}
 
 	@GetMapping("/{nome}")
-	public StatusEntity getById(@PathVariable("nome") String nome) throws NotFoundException {
+	public StatusEntity getById(@PathVariable("nome") String nome) throws NotFoundException, StatusNotFoundException {
 		return service.getByNome(nome);
 	}
 
 	@PostMapping
-	public StatusDto create(@RequestBody StatusDto Categoria) {
+	public StatusDto create(@RequestBody StatusDto Categoria) throws StatusDuplicadoException {
 		return service.create(Categoria);
 	}
 
-	@PutMapping()
-	public StatusDto update(@RequestBody StatusDto status)
+	@PutMapping("/{nomeStatus}")
+	public StatusDto update(@PathVariable String nomeStatus, @RequestBody StatusDto status)
 			throws NotFoundException {
-		return service.update(status);
+		return service.update(nomeStatus,status);
 	}
+	
+	/*
+	 * @PutMapping() public StatusDto update(@RequestBody StatusDto status) throws
+	 * NotFoundException { return service.update(status); }
+	 */
 
 	@DeleteMapping("/{nome}")
-	public void deleteByNome(@PathVariable String nome) {
+	public void deleteByNome(@PathVariable String nome) throws StatusNotFoundException {
 		service.deleteByNome(nome);
 	}
 

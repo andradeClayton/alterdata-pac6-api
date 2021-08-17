@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.ws.rs.core.MediaType;
 
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoRequest;
 import org.serratec.java2backend.alterdatapac6.dto.UsuarioDtoResponse;
 import org.serratec.java2backend.alterdatapac6.entity.ImagemEntity;
-import org.serratec.java2backend.alterdatapac6.entity.UsuarioEntity;
+import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioDuplicadoException;
+import org.serratec.java2backend.alterdatapac6.exceptions.UsuarioNotFoundException;
+import org.serratec.java2backend.alterdatapac6.mapper.UsuarioMapper;
 import org.serratec.java2backend.alterdatapac6.service.ImagemService;
 import org.serratec.java2backend.alterdatapac6.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,60 +40,96 @@ public class UsuarioController {
 	@Autowired
 	ImagemService imagemService;
 	
+	@Autowired
+	UsuarioMapper mapper;
 
 	/*
 	  antes de colocar a url da imagem no dto*/
 	 
 	 @GetMapping 
-	 public List<UsuarioEntity> getAll(){ return service.getAll(); }
+	 //public List<UsuarioEntity> getAll(){ return service.getAll(); }
+	 public List<UsuarioDtoResponse> getAll() throws UsuarioNotFoundException{
+		 return service.getAllUser();
+	 }
 	 
 	
-	/*
-	 * @GetMapping public List<UsuarioDto> getAll(){ return service.getAll(); }
-	 */
-
 	/*
 	 * antes de incluir a url da imagem no getusername*/
 	  
 	@GetMapping("/{userName}") 
-	  public UsuarioEntity getByUserNome(@PathVariable String userName) {
-		  return service.getByUserName(userName);
-		  }
+	  public ResponseEntity<UsuarioDtoResponse> getByUserNome(@PathVariable String userName) throws UsuarioNotFoundException {
+		
+			return ResponseEntity.ok(service.getByUserName(userName));
+		
+	  }
 	 
+		/*
+		 * // 01/08/21 troquei esse metodo pelo editaPerfil
+		 * 
+		 * @PutMapping public UsuarioDtoResponse update(@RequestBody UsuarioDtoRequest
+		 * usuario) { return service.update(usuario); }
+		 */
 	
-	/*
-	 * @GetMapping("/{userName}") public UsuarioDto getByUserNome(@PathVariable
-	 * String userName) { return service.getByUserNameUrl(userName); }
-	 */
-	
-	/* antes da inclusão de imagens
-	 * @PostMapping public UsuarioDto create(@RequestBody UsuarioDto usuario) throws
-	 * IOException { return service.create(usuario); }
-	 */
-	
-	@PutMapping
-	public UsuarioDtoResponse update(@RequestBody UsuarioDtoRequest usuario) {
-		return service.update(usuario);
+	@PutMapping("/editaPerfilN1b/{userName}")
+	public UsuarioDtoResponse editaPerfilN1b (@PathVariable String userName, @RequestBody UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
+		//teste de aruivo vazio
+		
+		return mapper.toDto(service.updateN1(userName,usuario));
 	}
+	
+	
+	//@PutMapping(value="/editaPerfilN1/{userName}", consumes = {MediaType.MULTIPART_FORM_DATA})
+	@PutMapping("/editaPerfilN1/{userName}")
+	public UsuarioDtoResponse editaPerfilN1 (@PathVariable String userName, @RequestPart MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException, UsuarioDuplicadoException {
+		//teste de aruivo vazio
+		
+		  if(file==null) { throw new UsuarioNotFoundException("arquivo vazio"); }
+		 
+		
+		return service.editaPerfilN1(userName,usuario, file);
+	}
+	
+	
+	@PutMapping("/editaPerfilN2/{userName}")
+	public UsuarioDtoResponse editaPerfilN2 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException {
+		return service.editaPerfilN2(userName,usuario);
+	}
+	
+	@PutMapping("/editaPerfilN3/{userName}")
+	public UsuarioDtoResponse editaPerfilN3 (@PathVariable String userName,@RequestBody UsuarioDtoRequest usuario) throws IOException, UsuarioNotFoundException {
+		return service.editaPerfilN3(userName,usuario);
+	}
+	
 	
 	@DeleteMapping("/{userName}")
-	public void deleteByUserName(@PathVariable String userName) {
-		service.deleteByUserName(userName);
+	public String deleteByUserName(@PathVariable String userName) throws UsuarioNotFoundException {
+		String response = service.deleteByUserName(userName);
+		
+		if(response.equals(userName)) {
+			return "Usuário "+userName+" deletado com sucesso!";
+		}else {
+			return "Usuário não cadastrado!";
+		}
+		
 	}
 
 	
 
-	@PostMapping("/create")
-	public UsuarioDtoResponse create(@RequestParam MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws IOException {
-		return service.create(usuario,file);
-	}
-	
-	
-	/* 
-	 * @PostMapping("/create") public ClientDTO create(@RequestParam MultipartFile
-	 * file , @RequestPart ClientEntity entity) throws IOException { return
-	 * service.create(entity, file); }
+	/*
+	 * @PostMapping("/create") public UsuarioDtoResponse create(@RequestParam
+	 * MultipartFile file , @RequestPart UsuarioDtoRequest usuario) throws
+	 * IOException, NotFoundException, UsuarioNotFoundException { return
+	 * service.create(usuario,file); }
 	 */
+	
+		
+	
+	  @PostMapping("/criaPerfil/{userName}") 
+	  public String criaPerfil(@PathVariable String userName, @RequestBody UsuarioDtoRequest usuario) throws MessagingException, UsuarioNotFoundException {
+	  return service.criaPerfil(userName,usuario);
+	  
+	  }
+	 
 	
 	
 	@GetMapping("{usuarioId}/image")
@@ -102,20 +141,9 @@ public class UsuarioController {
 		return new ResponseEntity<byte[]>(imagem.getData(),header, HttpStatus.OK);
 	}
 	
-	
-	
-	/*
-	 * @GetMapping("/client/{clientId}/image") public ResponseEntity<byte[]>
-	 * getImage(@PathVariable Long clientId){ ImageEntity imagem =
-	 * imageService.getImagem(clientId); HttpHeaders header = new HttpHeaders();
-	 * header.add("content-length", String.valueOf(imagem.getData().length));
-	 * header.add("content-type", imagem.getMimeType()); return new
-	 * ResponseEntity<byte[]>(imagem.getData(),header, HttpStatus.OK); }
-	 */
-	
-	
+		
 	@PutMapping("/resetSenha/{userName}")
-	public String resetSenha(@PathVariable String userName) throws MessagingException {
+	public String resetSenha(@PathVariable String userName) throws MessagingException, UsuarioNotFoundException {
 		return service.resetSenha(userName);
 	}
 	

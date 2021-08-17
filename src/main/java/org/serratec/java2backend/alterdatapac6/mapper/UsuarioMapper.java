@@ -25,18 +25,40 @@ public class UsuarioMapper {
 	}
 	
 	public UsuarioDtoResponse toDto(UsuarioEntity entity) {
-		UsuarioDtoResponse dto = new UsuarioDtoResponse();
+		UsuarioDtoResponse usuarioDto = new UsuarioDtoResponse();
 		
-		dto.setNome(entity.getNome());
-		dto.setNickName(entity.getNickName());
-		dto.setUserName(entity.getUserName());
-		dto.setEmail(entity.getEmail());
-		dto.setPapel(entity.getPapel().getNome());
-		dto.setEquipe(entity.getEquipe().getNome());
-		dto.setStatus(entity.getStatus().getNome());
+		/*
+		 * dto.setNome(entity.getNome()); dto.setNickName(entity.getNickName());
+		 * dto.setUserName(entity.getUserName()); dto.setEmail(entity.getEmail());
+		 * dto.setPapel(entity.getPapel().getNome());
+		 * dto.setEquipe(entity.getEquipe().getNome());
+		 * dto.setStatus(entity.getStatus().getNome());
+		 */
 		
 		
-		return dto;
+		
+		 usuarioDto.setNome(entity.getNome());
+		 usuarioDto.setNickName(entity.getNickName());
+		 usuarioDto.setPapel(entity.getPapel().getNome());
+		 usuarioDto.setUserName(entity.getUserName());
+		 usuarioDto.setEquipe(entity.getEquipe().getNome());
+		 usuarioDto.setStatus(entity.getStatus().getNome());
+		 usuarioDto.setEmail(entity.getEmail());
+		
+		
+		
+		
+		
+		
+		return usuarioDto;
 	}
 
 }
+
+
+
+
+
+ 
+
+
